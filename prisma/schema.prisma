@@ -1,0 +1,73 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                 String    @id @default(auto()) @map("_id") @db.ObjectId
+  usn                String    @unique
+  name               String
+  email              String    @unique
+  password           String
+  role               Role      @default(USER)
+  branch             Branch
+  club               CLUB?
+  joinedOn           DateTime? @default(now())
+  organizingEventIds String[]  @default([]) @db.ObjectId
+  organizingEvents   Event[]   @relation("Organiser", fields: [organizingEventIds], references: [id])
+  createdEvents      Event[]   @relation("Author")
+}
+
+model Event {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  desc         String
+  imgUrl       String?
+  from         DateTime
+  to           DateTime
+  state        EventState @default(DRAFT)
+  organiserIds String[]   @db.ObjectId
+  organisers   User[]     @relation("Organiser", fields: [organiserIds], references: [id])
+  createdOn    DateTime?  @default(now())
+  authorId     String     @db.ObjectId
+  author       User       @relation("Author", fields: [authorId], references: [id])
+}
+
+enum Role {
+  ADMIN
+  CLUBLEAD
+  ORGANIZER
+  USER
+}
+
+enum Branch {
+  CSE
+  ISE
+  MECH
+  CCE
+  EEE
+  ECE
+}
+
+enum CLUB {
+  FLC
+  VISTA
+  ACE
+}
+
+enum EventState {
+  DRAFT
+  PUBLISHED
+  LIVE
+  CANCELLED
+}
