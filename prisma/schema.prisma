@@ -14,25 +14,25 @@ generator client {
 }
 
 model User {
-  id                 String    @id @default(auto()) @map("_id") @db.ObjectId
-  usn                String    @unique
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  usn                String   @unique
   name               String
-  email              String    @unique
+  email              String   @unique
   password           String
-  role               Role      @default(USER)
+  role               Role     @default(USER)
   branch             Branch
   club               CLUB?
-  joinedOn           DateTime? @default(now())
-  organizingEventIds String[]  @default([]) @db.ObjectId
-  organizingEvents   Event[]   @relation("Organiser", fields: [organizingEventIds], references: [id])
-  createdEvents      Event[]   @relation("Author")
+  joinedOn           DateTime @default(now())
+  organizingEventIds String[] @default([]) @db.ObjectId
+  organizingEvents   Event[]  @relation("Organiser", fields: [organizingEventIds], references: [id])
+  createdEvents      Event[]  @relation("Author")
 }
 
 model Event {
   id           String     @id @default(auto()) @map("_id") @db.ObjectId
   name         String
   desc         String
-  imgUrl       String?
+  imgUrl       String     @default("https://via.placeholder.com/150")
   from         DateTime
   to           DateTime
   state        EventState @default(DRAFT)
