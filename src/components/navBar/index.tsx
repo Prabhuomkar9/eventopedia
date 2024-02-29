@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from "react";
+import ThemeBtn from "../themeBtn";
 
 const NavBar: FunctionComponent = () => {
   return (
@@ -8,6 +9,7 @@ const NavBar: FunctionComponent = () => {
         <li></li>
         <li></li>
         <li></li>
+        <ThemeBtn />
       </ul>
     </div>
   );
