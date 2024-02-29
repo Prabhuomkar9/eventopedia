@@ -4,6 +4,7 @@ import Footer from "../footer";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/themeProvider";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +26,7 @@ const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
         <Footer />
       </ThemeProvider>
       <Analytics />
+      <SpeedInsights />
     </>
   );
 };
