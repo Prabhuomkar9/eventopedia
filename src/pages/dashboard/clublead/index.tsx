@@ -1,16 +1,18 @@
-import React, { FunctionComponent, useState } from "react";
+import { Branch } from "@prisma/client";
+import { NextPage } from "next";
+import React, { useState } from "react";
 
-const President: FunctionComponent<{}> = ({}) => {
+const ClubLead: NextPage<{}> = ({}) => {
   const [userData, setUserData] = useState({
     email: "",
     name: "",
-    branch: "",
+    branch: "" as Branch,
     password: "",
     usn: "",
   });
 
   const createUser = async () => {
-    const users = await fetch("/api/user", {
+    const user = await fetch("/api/user", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -23,7 +25,7 @@ const President: FunctionComponent<{}> = ({}) => {
         usn: userData.usn,
       }),
     });
-    const data = await users.json();
+    const data = await user.json();
     console.log(data);
   };
 
@@ -61,7 +63,7 @@ const President: FunctionComponent<{}> = ({}) => {
         value={userData.branch}
         onChange={(e) => {
           setUserData((prev) => {
-            return { ...prev, branch: e.target.value };
+            return { ...prev, branch: e.target.value as Branch };
           });
         }}
       />
@@ -101,4 +103,4 @@ const President: FunctionComponent<{}> = ({}) => {
   );
 };
 
-export default President;
+export default ClubLead;

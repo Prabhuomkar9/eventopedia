@@ -69,5 +69,6 @@ enum EventState {
   DRAFT
   PUBLISHED
   LIVE
+  COMPLETED
   CANCELLED
 }

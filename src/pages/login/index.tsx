@@ -1,7 +1,7 @@
 import React from "react";
 import { NextPage } from "next";
 
-const Login: NextPage = () => {
+const Login: NextPage<{}> = ({}) => {
   return <div>login page</div>;
 };
 

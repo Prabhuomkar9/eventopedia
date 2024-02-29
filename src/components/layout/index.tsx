@@ -9,7 +9,9 @@ const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   return (
     <>
       <NavBar />
-      <main className={`${inter.className} relative min-h-screen min-w-screen`}>
+      <main
+        className={`${inter.className} bg-black text-white relative min-h-screen min-w-screen`}
+      >
         {children}
       </main>
       <Footer />

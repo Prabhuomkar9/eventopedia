@@ -1,7 +1,6 @@
-import Layout from "@/components/layout.js";
-import "@/styles/globals.css";
 import type { AppProps, AppType } from "next/app";
-import { trpc } from "../utils/trpc";
+import Layout from "@/components/layout";
+import "@/styles/globals.css";
 
 const App: AppType<AppProps> = ({ Component, pageProps: { ...pageProps } }) => {
   return (
@@ -11,4 +10,4 @@ const App: AppType<AppProps> = ({ Component, pageProps: { ...pageProps } }) => {
   );
 };
 
-export default trpc.withTRPC(App);
+export default App;
