@@ -30,6 +30,7 @@ model User {
 
 model Event {
   id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  eventId      String     @unique
   name         String
   desc         String
   imgUrl       String     @default("https://via.placeholder.com/150")
@@ -39,8 +40,8 @@ model Event {
   organiserIds String[]   @db.ObjectId
   organisers   User[]     @relation("Organiser", fields: [organiserIds], references: [id])
   createdOn    DateTime?  @default(now())
-  authorId     String     @db.ObjectId
-  author       User       @relation("Author", fields: [authorId], references: [id])
+  authorId     String?    @db.ObjectId
+  author       User?      @relation("Author", fields: [authorId], references: [id])
 }
 
 enum Role {
