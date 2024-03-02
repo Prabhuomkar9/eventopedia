@@ -1,11 +1,11 @@
-# hack-overflow-prep
+# eventopedia
 
 ## Steps to clone repository
 
 ### Clone the repository to your local
 
 ```bash
-git clone https://github.com/Prabhuomkar9/hack-overflow-prep.git
+git clone https://github.com/Prabhuomkar9/eventopedia.git
 ```
 
 ### Install dependencies
@@ -34,11 +34,6 @@ For example, if my app is running
 ```bash
 On PC            : localhost:3000
 On Same Network  : 192.168.xxx.yy:3000
-```
-
-run following to check if express is running, you can also use postman and teach me some backend ??
-```bash
-curl http://localhost:3000/api/example
 ```
 
 ## How to update code
