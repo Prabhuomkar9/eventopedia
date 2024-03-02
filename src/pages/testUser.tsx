@@ -1,17 +1,15 @@
 import React, { useState } from "react";
 import { NextPage } from "next";
-import { Branch } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useSession } from "next-auth/react";
 
 const Test: NextPage<{}> = ({}) => {
-  const [userData, setUserData] = useState({
-    email: "",
-    name: "",
-    branch: "" as Branch,
-    password: "",
-    usn: "",
-  });
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [branch, setBranch] = useState("");
+  const [password, setPassword] = useState("");
+  const [usn, setUsn] = useState("");
 
   const getUser = async () => {
     const user = await fetch("/api/user", {
@@ -21,7 +19,7 @@ const Test: NextPage<{}> = ({}) => {
       },
       body: JSON.stringify({
         type: "get",
-        email: userData.email,
+        email: email,
       }),
     });
     const data = await user.json();
@@ -36,11 +34,11 @@ const Test: NextPage<{}> = ({}) => {
       },
       body: JSON.stringify({
         type: "create",
-        email: userData.email,
-        name: userData.name,
-        branch: userData.branch,
-        password: userData.password,
-        usn: userData.usn,
+        email: email,
+        name: name,
+        branch: branch,
+        password: password,
+        usn: usn,
       }),
     });
     const data = await user.json();
@@ -55,11 +53,11 @@ const Test: NextPage<{}> = ({}) => {
       },
       body: JSON.stringify({
         type: "update",
-        email: userData.email,
-        name: userData.name,
-        branch: userData.branch,
-        password: userData.password,
-        usn: userData.usn,
+        email: email,
+        name: name,
+        branch: branch,
+        password: password,
+        usn: usn,
       }),
     });
     const data = await user.json();
@@ -74,12 +72,16 @@ const Test: NextPage<{}> = ({}) => {
       },
       body: JSON.stringify({
         type: "delete",
-        email: userData.email,
+        email: email,
       }),
     });
     const data = await user.json();
     console.log(data);
   };
+
+  const { data: session } = useSession();
+
+  if (!session) return <div>Please sign in</div>;
 
   return (
     <div className="flex flex-col justify-center items-center gap-5 p-10">
@@ -87,37 +89,43 @@ const Test: NextPage<{}> = ({}) => {
         <Input
           type="text"
           placeholder="Name"
-          value={userData.name}
-          onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+          value={name}
+          onChange={(e) => {
+            setName(e.target.value);
+          }}
         />
         <Input
           type="email"
           placeholder="Email"
-          value={userData.email}
-          onChange={(e) => setUserData({ ...userData, email: e.target.value })}
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
           required
         />
         <Input
           type="text"
           placeholder="Password"
-          value={userData.password}
-          onChange={(e) =>
-            setUserData({ ...userData, password: e.target.value })
-          }
+          value={password}
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
         />
         <Input
           type="text"
           placeholder="Branch"
-          value={userData.branch}
-          onChange={(e) =>
-            setUserData({ ...userData, branch: e.target.value as Branch })
-          }
+          value={branch}
+          onChange={(e) => {
+            setBranch(e.target.value);
+          }}
         />
         <Input
           type="text"
           placeholder="USN"
-          value={userData.usn}
-          onChange={(e) => setUserData({ ...userData, usn: e.target.value })}
+          value={usn}
+          onChange={(e) => {
+            setUsn(e.target.value);
+          }}
         />
       </div>
       <Button onClick={getUser}>Get User</Button>

@@ -14,18 +14,19 @@ generator client {
 }
 
 model User {
-  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
-  usn                String   @unique
+  id                 String    @id @default(auto()) @map("_id") @db.ObjectId
+  usn                String    @unique
   name               String
-  email              String   @unique
+  email              String    @unique
   password           String
-  role               Role     @default(USER)
+  role               Role      @default(USER)
   branch             Branch
   club               CLUB?
-  joinedOn           DateTime @default(now())
-  organizingEventIds String[] @default([]) @db.ObjectId
-  organizingEvents   Event[]  @relation("Organiser", fields: [organizingEventIds], references: [id])
-  createdEvents      Event[]  @relation("Author")
+  joinedOn           DateTime  @default(now())
+  organizingEventIds String[]  @default([]) @db.ObjectId
+  organizingEvents   Event[]   @relation("Organiser", fields: [organizingEventIds], references: [id])
+  createdEvents      Event[]   @relation("Author")
+  Session            Session[]
 }
 
 model Event {
@@ -42,6 +43,14 @@ model Event {
   createdOn    DateTime?  @default(now())
   authorId     String?    @db.ObjectId
   author       User?      @relation("Author", fields: [authorId], references: [id])
+}
+
+model Session {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  token     String   @unique
+  expiresAt DateTime
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 enum Role {
