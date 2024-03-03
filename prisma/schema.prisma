@@ -14,7 +14,7 @@ generator client {
 }
 
 // Models
-model Student {
+model User {
   id              String   @id @default(auto()) @map("_id") @db.ObjectId
   name            String
   usn             String   @unique
@@ -28,35 +28,35 @@ model Student {
   // Relational Fields
   // 1-
   branchId        String   @db.ObjectId
-  branch          Branch   @relation("rStudentBranch", fields: [branchId], references: [id])
-  presidentOf     Club?    @relation("rPresident")
+  branch          Branch   @relation(fields: [branchId], references: [id])
+  presidentOf     Club?
   // n-
   clubId          String[] @db.ObjectId
   club            Club[]   @relation("rClubMember", fields: [clubId], references: [id])
   createdEventIds String[] @db.ObjectId
-  createdEvents   Event[]  @relation("rOrganiser", fields: [createdEventIds], references: [id])
+  createdEvents   Event[]  @relation(fields: [createdEventIds], references: [id])
 }
 
 model Branch {
-  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
   name     String
   // Relational Fields
   // n-
-  students Student[] @relation("rStudentBranch")
+  students User[]
 }
 
 model Club {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String
   // Relational Fields
   // 1-
-  presidentId String    @unique @db.ObjectId
-  president   Student   @relation("rPresident", fields: [presidentId], references: [id], onUpdate: NoAction)
+  presidentId String   @unique @db.ObjectId
+  president   User     @relation(fields: [presidentId], references: [id], onUpdate: NoAction)
   // n-
-  memberIds   String[]  @db.ObjectId
-  members     Student[] @relation("rClubMember", fields: [memberIds], references: [id])
-  events      Event[]   @relation("rOrganizingClub")
+  memberIds   String[] @db.ObjectId
+  members     User[]   @relation("rClubMember", fields: [memberIds], references: [id])
+  events      Event[]
 }
 
 model Event {
@@ -79,10 +79,10 @@ model Event {
   // Relational Fields
   // 1-
   clubId        String     @db.ObjectId
-  club          Club       @relation("rOrganizingClub", fields: [clubId], references: [id])
+  club          Club       @relation(fields: [clubId], references: [id])
   // n-
   organiserIds  String[]   @db.ObjectId
-  organisers    Student[]  @relation("rOrganiser", fields: [organiserIds], references: [id])
+  organisers    User[]     @relation(fields: [organiserIds], references: [id])
 }
 
 // Enum Types

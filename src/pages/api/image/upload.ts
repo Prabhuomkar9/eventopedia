@@ -9,11 +9,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     console.log("Uploading Image...")
     const session = await getServerSession(req, res, authOptions)
     if (!session || !session.user)
-      throw new Error("You must be signed in to upload an image")
+      throw new Error("User not logged in.")
 
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email as string }
+    const user = await prisma.user.findFirst({
+      where: { id: session.user.id }
     })
+
+    if (!user)
+      throw new Error("User not found.")
+
+
 
   } catch (error) {
     console.error(error)

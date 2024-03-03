@@ -7,23 +7,35 @@ const config = cloudinary.config({
   secure: true,
 })
 
+const params = {
+  folder: "events",
+  allowedFormats: ["jpg", "png", "jpeg"],
+  public_id: (req: any, file: any) => {
+    let { eventName } = req?.params
 
-const uploadImage = async (file: any) => {
-  await cloudinary.uploader.upload(file, (error, result) => {
-    if (error) {
-      reject(error);
+    if (eventName && eventName.length) {
+      eventName.replace(/[/\\\s]/g, "_")
+
     }
-    resolve(result);
-  });
-};
-
-const deleteImage = (publicId: string) => {
-  return new Promise((resolve, reject) => {
-    cloudinary.uploader.destroy(publicId, (error, result) => {
-      if (error) {
-        reject(error);
-      }
-      resolve(result);
-    });
-  });
+  }
 }
+
+// const uploadImage = async (file: any) => {
+//   await cloudinary.uploader.upload(file, (error, result) => {
+//     if (error) {
+//       reject(error);
+//     }
+//     resolve(result);
+//   });
+// };
+
+// const deleteImage = (publicId: string) => {
+//   return new Promise((resolve, reject) => {
+//     cloudinary.uploader.destroy(publicId, (error, result) => {
+//       if (error) {
+//         reject(error);
+//       }
+//       resolve(result);
+//     });
+//   });
+// }

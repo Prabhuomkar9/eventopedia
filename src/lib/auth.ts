@@ -1,58 +1,50 @@
-import { NextAuthOptions } from 'next-auth'
-import CredentialsProvider from 'next-auth/providers/credentials';
+import { type DefaultSession, type NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
-import GithubProvider from 'next-auth/providers/github'
+import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import prisma from '@/server/prisma';
+import { type Role } from '@prisma/client';
 
+/* Module augmentation for `next-auth` types.Allows us to add custom properties to the`session` object and keep type safety.
+  @see https://next-auth.js.org/getting-started/typescript#module-augmentation */
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string
+      role: Role
+    } & DefaultSession["user"]
+  }
+}
 
-export const authOptions: NextAuthOptions = {
-  providers: [
-    // CredentialsProvider({
-    //   name: "Credentials",
-    //   credentials: {
-    //     email: { label: "Email", type: "email", placeholder: "Enter your email" },
-    //     password: { label: "Password", type: "password", placeholder: "Enter your password" },
-    //   },
-    //   async authorize(credentials) {
-    //     if (!credentials || !credentials.email || !credentials.password)
-    //       return null;
-
-    //     const user = await prisma.user.findFirst({
-    //       where: {
-    //         email: credentials.email,
-    //       }
-    //     })
-
-    //     if (!user)
-    //       return null;
-
-    //     // Encrypt/Decrypt password here
-    //     if (user.password !== credentials.password)
-    //       return null;
-
-    //     return user;
-    //   }
-    // }),
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-    }),
-    GithubProvider({
-      clientId: process.env.GITHUB_CLIENT_ID as string,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
-    }),
-  ],
+const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET as string,
+  adapter: PrismaAdapter(prisma),
+  callbacks: {
+    async session({ session }) {
+      const dbUser = await prisma.user.findFirst({
+        where: {
+          email: session.user.email as string,
+        },
+      })
+
+      if (!dbUser)
+        throw new Error("User not found");
+
+      session.user.id = dbUser.id;
+      session.user.role = dbUser.role;
+
+      return session
+    },
+  },
   pages: {
     signIn: '/login',
     signOut: '/logout',
   },
-  callbacks: {
-    async session({ newSession, session, token, trigger, user }) {
-      session.user = { id: user.id, name: user.name, email: user.email, image: user.image } as { id: string, name?: string | null | undefined, email?: string | null | undefined, image?: string | null | undefined };
-      return session
-    },
-  },
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    }),
+  ],
 };
 
 export default authOptions;
