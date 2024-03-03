@@ -6,7 +6,7 @@ const ClubLead: NextPage<{}> = ({}) => {
   const [userData, setUserData] = useState({
     email: "",
     name: "",
-    branch: "" as Branch,
+    branch: "ISE",
     password: "",
     usn: "",
   });
@@ -63,7 +63,7 @@ const ClubLead: NextPage<{}> = ({}) => {
         value={userData.branch}
         onChange={(e) => {
           setUserData((prev) => {
-            return { ...prev, branch: e.target.value as Branch };
+            return { ...prev };
           });
         }}
       />
