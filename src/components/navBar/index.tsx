@@ -4,11 +4,7 @@ import ThemeBtn from "../themeBtn";
 const NavBar: FunctionComponent = () => {
   return (
     <div className="w-screen h-16 bg-red-300">
-      <ul>
-        <li>Login</li>
-        <li></li>
-        <li></li>
-        <li></li>
+      <ul className="flex flex-row gap-3">
         <ThemeBtn />
       </ul>
     </div>
