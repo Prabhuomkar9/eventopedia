@@ -12,10 +12,10 @@ const LogIn: NextPage = () => {
           <GoogleSignIn />
           <GithubSignIn />
         </div>
-        <span className="text-2xl font-semibold text-white text-center">
+        {/* <span className="text-2xl font-semibold text-white text-center">
           Or
         </span>
-        <EmailSignIn />
+        <EmailSignIn /> */}
       </div>
     </div>
   );
