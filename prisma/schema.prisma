@@ -13,70 +13,94 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model User {
-  id                 String    @id @default(auto()) @map("_id") @db.ObjectId
-  usn                String    @unique
-  name               String
-  email              String    @unique
-  password           String
-  role               Role      @default(USER)
-  branch             Branch
-  club               CLUB?
-  joinedOn           DateTime  @default(now())
-  organizingEventIds String[]  @default([]) @db.ObjectId
-  organizingEvents   Event[]   @relation("Organiser", fields: [organizingEventIds], references: [id])
-  createdEvents      Event[]   @relation("Author")
-  Session            Session[]
+// Models
+model Student {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  usn             String   @unique
+  email           String   @unique
+  password        String
+  role            Role     @default(USER)
+  profileImage    String?
+  phoneNumber     String?
+  joinedOn        DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  // Relational Fields
+  // 1-
+  branchId        String   @db.ObjectId
+  branch          Branch   @relation("rStudentBranch", fields: [branchId], references: [id])
+  presidentOf     Club?    @relation("rPresident")
+  // n-
+  clubId          String[] @db.ObjectId
+  club            Club[]   @relation("rClubMember", fields: [clubId], references: [id])
+  createdEventIds String[] @db.ObjectId
+  createdEvents   Event[]  @relation("rOrganiser", fields: [createdEventIds], references: [id])
+}
+
+model Branch {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  // Relational Fields
+  // n-
+  students Student[] @relation("rStudentBranch")
+}
+
+model Club {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  // Relational Fields
+  // 1-
+  presidentId String    @unique @db.ObjectId
+  president   Student   @relation("rPresident", fields: [presidentId], references: [id], onUpdate: NoAction)
+  // n-
+  memberIds   String[]  @db.ObjectId
+  members     Student[] @relation("rClubMember", fields: [memberIds], references: [id])
+  events      Event[]   @relation("rOrganizingClub")
 }
 
 model Event {
-  id           String     @id @default(auto()) @map("_id") @db.ObjectId
-  eventId      String     @unique
-  name         String
-  desc         String
-  imgUrl       String     @default("https://via.placeholder.com/150")
-  from         DateTime
-  to           DateTime
-  state        EventState @default(DRAFT)
-  organiserIds String[]   @db.ObjectId
-  organisers   User[]     @relation("Organiser", fields: [organiserIds], references: [id])
-  createdOn    DateTime?  @default(now())
-  authorId     String?    @db.ObjectId
-  author       User?      @relation("Author", fields: [authorId], references: [id])
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  description   String?
+  bannerImage   String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  fees          Int        @default(0)
+  noOfRounds    Int        @default(1)
+  eventType     EventType  @default(INDIVIDUAL)
+  venue         String?
+  minTeamSize   Int        @default(1)
+  maxTeamSize   Int        @default(1)
+  maxTeams      Int?
+  state         EventState @default(DRAFT)
+  startDateTime DateTime
+  endDateTime   DateTime
+  // Relational Fields
+  // 1-
+  clubId        String     @db.ObjectId
+  club          Club       @relation("rOrganizingClub", fields: [clubId], references: [id])
+  // n-
+  organiserIds  String[]   @db.ObjectId
+  organisers    Student[]  @relation("rOrganiser", fields: [organiserIds], references: [id])
 }
 
-model Session {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  token     String   @unique
-  expiresAt DateTime
-  userId    String   @db.ObjectId
-  user      User     @relation(fields: [userId], references: [id])
-}
-
+// Enum Types
 enum Role {
   ADMIN
-  CLUBLEAD
+  PRESIDENT
   ORGANIZER
   USER
 }
 
-enum Branch {
-  CSE
-  ISE
-  MECH
-  CCE
-  EEE
-  ECE
-}
-
-enum CLUB {
-  FLC
-  VISTA
-  ACE
+enum EventType {
+  INDIVIDUAL
+  TEAM
 }
 
 enum EventState {
   DRAFT
+  SUBMITTED
   PUBLISHED
   LIVE
   COMPLETED
