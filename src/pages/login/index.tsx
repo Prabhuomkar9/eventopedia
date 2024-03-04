@@ -1,6 +1,6 @@
-import EmailSignIn from "@/components/signIn/emailSignIn";
-import GithubSignIn from "@/components/signIn/githubSignIn";
-import GoogleSignIn from "@/components/signIn/googleSignIn";
+import EmailSignIn from "~/components/signIn/emailSignIn";
+import GithubSignIn from "~/components/signIn/githubSignIn";
+import GoogleSignIn from "~/components/signIn/googleSignIn";
 import { NextPage } from "next";
 
 const LogIn: NextPage = () => {
@@ -10,7 +10,7 @@ const LogIn: NextPage = () => {
         <h1 className="text-4xl font-extrabold">Sign In</h1>
         <div className="flex flex-col justify-center items-center gap-3">
           <GoogleSignIn />
-          <GithubSignIn />
+          {/* <GithubSignIn /> */}
         </div>
         {/* <span className="text-2xl font-semibold text-white text-center">
           Or

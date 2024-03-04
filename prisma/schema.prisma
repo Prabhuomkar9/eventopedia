@@ -4,37 +4,38 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
-// Models
 model User {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
   name            String
-  usn             String   @unique
-  email           String   @unique
-  password        String
-  role            Role     @default(USER)
-  profileImage    String?
+  usn             String?   @unique
+  email           String    @unique
+  emailVerified   DateTime?
+  role            Role      @default(USER)
+  image           String?
   phoneNumber     String?
-  joinedOn        DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  joinedOn        DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
   // Relational Fields
   // 1-
-  branchId        String   @db.ObjectId
-  branch          Branch   @relation(fields: [branchId], references: [id])
+  branchId        String?   @db.ObjectId
+  branch          Branch?   @relation(fields: [branchId], references: [id])
   presidentOf     Club?
   // n-
-  clubId          String[] @db.ObjectId
-  club            Club[]   @relation("rClubMember", fields: [clubId], references: [id])
-  createdEventIds String[] @db.ObjectId
-  createdEvents   Event[]  @relation(fields: [createdEventIds], references: [id])
+  accounts        Account[]
+  sessions        Session[]
+  clubId          String[]  @db.ObjectId
+  club            Club[]    @relation("rClubMember", fields: [clubId], references: [id])
+  createdEventIds String[]  @db.ObjectId
+  createdEvents   Event[]   @relation(fields: [createdEventIds], references: [id])
 }
 
 model Branch {
@@ -83,6 +84,42 @@ model Event {
   // n-
   organiserIds  String[]   @db.ObjectId
   organisers    User[]     @relation(fields: [organiserIds], references: [id])
+}
+
+// Necessary for Next auth
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.String
+  access_token      String? @db.String
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.String
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expires      DateTime
+}
+
+model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
 }
 
 // Enum Types
