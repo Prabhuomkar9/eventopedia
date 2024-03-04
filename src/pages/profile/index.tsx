@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import React from "react";
 
-const Profile: NextPage<{}> = ({}) => {
+const Profile: NextPage = () => {
   return <div>Profile</div>;
 };
 
