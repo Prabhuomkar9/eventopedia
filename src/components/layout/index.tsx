@@ -4,10 +4,14 @@ import Footer from "../footer";
 import { ThemeProvider } from "~/components/providers/themeProvider";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import CustomHead from "../head";
 
 const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   return (
     <>
+      <CustomHead />
       <ThemeProvider
         attribute="class"
         defaultTheme="system"
@@ -21,6 +25,7 @@ const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
           {children}
         </main>
         <Footer />
+        <ToastContainer />
       </ThemeProvider>
       <Analytics />
       <SpeedInsights />

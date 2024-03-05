@@ -1,4 +1,5 @@
 "use client";
+// This needs to be a client component for nextAuth.js to work properly
 import { Button } from "~/components/ui/button";
 import { signIn } from "next-auth/react";
 import React, { FormEvent, FunctionComponent } from "react";
@@ -11,9 +12,12 @@ const GoogleSignIn: FunctionComponent = () => {
   };
 
   return (
-    <Button onClick={handleOnClick}>
-      <FaGoogle size="4xl" />
-      <span className="ml-4">Continue with Google</span>
+    <Button
+      onClick={handleOnClick}
+      className="p-4 flex flex-row justify-center items-center gap-3"
+    >
+      <FaGoogle className="text-xl" />
+      <span className="text-2xl">Sign In</span>
     </Button>
   );
 };
