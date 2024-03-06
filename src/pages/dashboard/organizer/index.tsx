@@ -4,10 +4,10 @@ import DashBoardLayout from "~/components/layout/dashBoardLayout";
 
 const Organiser: NextPage = () => {
   return (
-    <DashBoardLayout allowedUserRole="ORGANIZER">
+    <DashBoardLayout allowedUserRole="ORGANISER">
       <div>
-        <h1>Organizer Dashboard</h1>
-        <p>Welcome to the organizer dashboard</p>
+        <h1>Organiser Dashboard</h1>
+        <p>Welcome to the organiser dashboard</p>
       </div>
     </DashBoardLayout>
   );

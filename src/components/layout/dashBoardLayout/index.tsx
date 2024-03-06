@@ -8,7 +8,6 @@ const DashBoardLayout: FunctionComponent<{
   children: ReactNode;
 }> = ({ allowedUserRole, children }) => {
   const { data: session, status, update } = useSession();
-  console.log(session?.user.role, allowedUserRole);
 
   if (!session || session.user.role !== allowedUserRole) return <NotFound />;
 

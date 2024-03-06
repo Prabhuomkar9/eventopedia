@@ -16,11 +16,12 @@ const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
       >
         <NavBar />
         <main
-          className={`bg-black text-white relative min-h-screen min-w-screen`}
+          className={`min-w-screen relative flex min-h-screen flex-col items-center justify-center bg-black text-white`}
         >
           {children}
         </main>
         <Footer />
+        <ToastContainer pauseOnFocusLoss={false} />
       </ThemeProvider>
       <Analytics />
       <SpeedInsights />

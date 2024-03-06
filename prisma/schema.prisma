@@ -21,6 +21,7 @@ model User {
   emailVerified   DateTime?
   role            Role      @default(USER)
   image           String?
+  bio             String?
   phoneNumber     String?
   joinedOn        DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
@@ -39,11 +40,13 @@ model User {
 }
 
 model Branch {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  shortName   String
+  description String?
   // Relational Fields
   // n-
-  students User[]
+  students    User[]
 }
 
 model Club {
@@ -126,7 +129,7 @@ model VerificationToken {
 enum Role {
   ADMIN
   PRESIDENT
-  ORGANIZER
+  ORGANISER
   USER
 }
 
