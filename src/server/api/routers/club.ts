@@ -19,7 +19,7 @@ const clubRouter = createTRPCRouter({
         name: input.name,
         description: input.description,
         members: {
-          connect: [{ id: ctx.session.user.id }]
+          connect: { id: ctx.session.user.id }
         },
         president: {
           connect: { id: ctx.session.user.id }
