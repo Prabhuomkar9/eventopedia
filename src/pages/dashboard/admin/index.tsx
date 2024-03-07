@@ -79,6 +79,7 @@ const Admin: NextPage = () => {
           <Input
             placeholder="Branch Name"
             value={branchData.name}
+            className="text-black"
             onChange={(e) => {
               setBranchData((prev) => {
                 return { ...prev, name: e.target.value };

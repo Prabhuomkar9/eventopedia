@@ -7,7 +7,7 @@ const clubRouter = createTRPCRouter({
     name: z.string(),
     description: z.string(),
   })).mutation(async ({ ctx, input }) => {
-    if (ctx.session.user.role != "ADMIN" && ctx.session.user.role != "PRESIDENT") {
+    if (ctx.session.user.role != "ADMIN") {
       throw new TRPCError({
         code: "FORBIDDEN",
         message: "You are not authorized to create a club"

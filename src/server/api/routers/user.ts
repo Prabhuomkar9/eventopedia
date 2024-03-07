@@ -79,7 +79,7 @@ const userRouter = createTRPCRouter({
           branch: {
             connect: { id: input.branchId }
           },
-          club: {
+          clubs: {
             connect: input.clubId?.map((id) => {
               return { id: id }
             })

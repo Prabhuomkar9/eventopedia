@@ -9,135 +9,127 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id              String    @id @default(auto()) @map("_id") @db.ObjectId
-  name            String
-  usn             String?   @unique
-  email           String    @unique
-  emailVerified   DateTime?
-  role            Role      @default(USER)
-  image           String?
-  bio             String?
-  phoneNumber     String?
-  joinedOn        DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  // Relational Fields
-  // 1-
-  branchId        String?   @db.ObjectId
-  branch          Branch?   @relation(fields: [branchId], references: [id])
-  presidentOf     Club?
-  // n-
-  accounts        Account[]
-  sessions        Session[]
-  clubId          String[]  @db.ObjectId
-  club            Club[]    @relation("rClubMember", fields: [clubId], references: [id])
-  createdEventIds String[]  @db.ObjectId
-  createdEvents   Event[]   @relation(fields: [createdEventIds], references: [id])
-}
-
-model Branch {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  shortName   String
-  description String?
-  // Relational Fields
-  // n-
-  students    User[]
-}
-
-model Club {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  description String
-  // Relational Fields
-  // 1-
-  presidentId String   @unique @db.ObjectId
-  president   User     @relation(fields: [presidentId], references: [id], onUpdate: NoAction)
-  // n-
-  memberIds   String[] @db.ObjectId
-  members     User[]   @relation("rClubMember", fields: [memberIds], references: [id])
-  events      Event[]
-}
-
-model Event {
-  id            String     @id @default(auto()) @map("_id") @db.ObjectId
-  name          String
-  description   String?
-  bannerImage   String?
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  fees          Int        @default(0)
-  noOfRounds    Int        @default(1)
-  eventType     EventType  @default(INDIVIDUAL)
-  venue         String?
-  minTeamSize   Int        @default(1)
-  maxTeamSize   Int        @default(1)
-  maxTeams      Int?
-  state         EventState @default(DRAFT)
-  startDateTime DateTime
-  endDateTime   DateTime
-  // Relational Fields
-  // 1-
-  clubId        String     @db.ObjectId
-  club          Club       @relation(fields: [clubId], references: [id])
-  // n-
-  organiserIds  String[]   @db.ObjectId
-  organisers    User[]     @relation(fields: [organiserIds], references: [id])
-}
-
-// Necessary for Next auth
 model Account {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String  @db.ObjectId
+  // Necessary for Next auth
+  id                String  @id @default(cuid())
+  userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.String
-  access_token      String? @db.String
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.String
+  id_token          String?
   session_state     String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
 
+model Branch {
+  // Developer defined
+  id          String  @id @default(cuid())
+  name        String
+  shortName   String
+  description String?
+  location    String?
+  // Relational fields
+  // 1-
+  // n-
+  students    User[]
+}
+
+model Club {
+  // Developer defined
+  id          String  @id @default(cuid())
+  name        String
+  description String
+  // Relational fields
+  // 1-
+  presidentId String
+  president   User    @relation(fields: [presidentId], references: [id], onDelete: Cascade)
+  // n-
+  members     User[]  @relation("ClubMembers")
+  events      Event[]
+}
+
+model Event {
+  // Developer defined
+  id            String     @id @default(cuid())
+  name          String
+  description   String?
+  bannerImage   String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  fees          Int        @default(0)
+  noOfRounds    Int        @default(0)
+  eventType     EventType  @default(INDIVIDUAL)
+  venue         String?
+  minTeamSize   Int        @default(1)
+  maxTeamSize   Int        @default(1)
+  maxTeams      Int?
+  eventState    EventState @default(DRAFT)
+  startDateTime DateTime
+  endDateTime   DateTime
+  // Relations
+  // 1-
+  clubId        String
+  club          Club       @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  // n-
+  organisers    User[]     @relation("EventOrganisers")
+}
+
 model Session {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  // Necessary for Next auth
+  id           String   @id @default(cuid())
   sessionToken String   @unique
-  userId       String   @db.ObjectId
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
   expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  // Necessary for Next auth
+  id               String    @id @default(cuid())
+  name             String?
+  email            String?   @unique
+  emailVerified    DateTime?
+  image            String?
+  accounts         Account[]
+  sessions         Session[]
+  // Developer defined
+  usn              String?   @unique
+  role             Role      @default(USER)
+  bio              String?
+  phoneNumber      String?
+  joinedOn         DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  // Relational fields
+  // 1-
+  branchId         String?
+  branch           Branch?   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  // n-
+  presidentOf      Club[]
+  clubs            Club[]    @relation("ClubMembers")
+  organisingEvents Event[]   @relation("EventOrganisers")
 }
 
 model VerificationToken {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  // Necessary for Next auth
   identifier String
   token      String   @unique
   expires    DateTime
 
-  @@unique([identifier, token])
+  @@index([identifier, token])
 }
 
 // Enum Types
-enum Role {
-  ADMIN
-  PRESIDENT
-  ORGANISER
-  USER
-}
-
-enum EventType {
-  INDIVIDUAL
-  TEAM
-}
-
 enum EventState {
   DRAFT
   SUBMITTED
@@ -145,4 +137,16 @@ enum EventState {
   LIVE
   COMPLETED
   CANCELLED
+}
+
+enum EventType {
+  INDIVIDUAL
+  TEAM
+}
+
+enum Role {
+  ADMIN
+  PRESIDENT
+  ORGANISER
+  USER
 }

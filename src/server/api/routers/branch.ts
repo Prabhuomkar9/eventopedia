@@ -8,7 +8,8 @@ const branchRouter = createTRPCRouter({
     .input(z.object({
       name: z.string(),
       shortName: z.string(),
-      description: z.string().optional()
+      description: z.string().optional(),
+      location: z.string().optional()
     }))
     .mutation(({ ctx, input }) => {
       if (ctx.session.user.role !== "ADMIN")
@@ -21,6 +22,7 @@ const branchRouter = createTRPCRouter({
           name: input.name,
           shortName: input.shortName,
           description: input.description,
+          location: input.location
         }
       })
     }),
