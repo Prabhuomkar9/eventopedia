@@ -11,10 +11,13 @@ const eventRouter = createTRPCRouter({
       clubId: z.string()
     })
   ).mutation(async ({ input, ctx }) => {
-    const user = ctx.session.user;
     const event = await ctx.db.event.create({
       data: {
-        organiserIds: [user.id],
+        organisers: {
+          connect: {
+            id: ctx.session.user.id
+          }
+        },
         clubId: input.clubId,
         name: input.name,
         description: input.description,
