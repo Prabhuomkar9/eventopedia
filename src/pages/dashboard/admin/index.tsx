@@ -1,9 +1,12 @@
 import { NextPage } from "next";
 import React, { useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
+import CreateBranchForm from "~/components/dashboard/form/create/createBranch";
+import CreateClubForm from "~/components/dashboard/form/create/createClub";
 import DashBoardLayout from "~/components/layout/dashBoardLayout";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { api } from "~/utils/api";
 
 const Admin: NextPage = () => {
@@ -40,83 +43,21 @@ const Admin: NextPage = () => {
 
   return (
     <DashBoardLayout allowedUserRole="ADMIN">
-      <div className="flex h-full w-full flex-col items-center justify-center gap-10">
-        <div className="flex flex-col items-center justify-center gap-3">
-          <h1 className="text-6xl font-bold">Admin Dashboard</h1>
-          <p className="text-xl">Welcome to the admin dashboard</p>
-        </div>
-        <div className="flex flex-row items-center justify-center gap-5">
-          <Input
-            placeholder="Club Name"
-            value={clubData.name}
-            onChange={(e) => {
-              setClubData((prev) => {
-                return { ...prev, name: e.target.value };
-              });
-            }}
-          />
-          <Input
-            placeholder="Club Description"
-            value={clubData.description}
-            onChange={(e) => {
-              setClubData((prev) => {
-                return { ...prev, description: e.target.value };
-              });
-            }}
-          />
-          <Button
-            onClick={() => {
-              createClub.mutate({
-                name: clubData.name,
-                description: clubData.description,
-              });
-            }}
-          >
-            Create Club
-          </Button>
-        </div>
-        <div className="flex flex-row items-center justify-center gap-5">
-          <Input
-            placeholder="Branch Name"
-            value={branchData.name}
-            className="text-black"
-            onChange={(e) => {
-              setBranchData((prev) => {
-                return { ...prev, name: e.target.value };
-              });
-            }}
-          />
-          <Input
-            placeholder="Branch Short Name"
-            value={branchData.shortName}
-            onChange={(e) => {
-              setBranchData((prev) => {
-                return { ...prev, shortName: e.target.value };
-              });
-            }}
-          />
-          <Input
-            placeholder="Branch Description"
-            value={branchData.description}
-            onChange={(e) => {
-              setBranchData((prev) => {
-                return { ...prev, description: e.target.value };
-              });
-            }}
-          />
-          <Button
-            onClick={() => {
-              createBranch.mutate({
-                name: branchData.name,
-                shortName: branchData.shortName,
-                description: branchData.description,
-              });
-            }}
-          >
-            Create Branch
-          </Button>
-        </div>
-      </div>
+      <Tabs defaultValue="branch" className="w-full">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="branch">Branch</TabsTrigger>
+          <TabsTrigger value="club">Club</TabsTrigger>
+        </TabsList>
+        <TabsContent
+          value="branch"
+          className="flex items-center justify-center"
+        >
+          <CreateBranchForm />
+        </TabsContent>
+        <TabsContent value="club">
+          <CreateClubForm />
+        </TabsContent>
+      </Tabs>
     </DashBoardLayout>
   );
 };

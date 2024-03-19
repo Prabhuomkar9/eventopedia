@@ -4,9 +4,8 @@ import Footer from "../footer";
 import { ThemeProvider } from "~/components/providers/themeProvider";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import CustomHead from "../head";
+import { Toaster } from "../ui/sonner";
 
 const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   return (
@@ -25,7 +24,7 @@ const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
           {children}
         </main>
         <Footer />
-        <ToastContainer pauseOnFocusLoss={false} />
+        <Toaster />
       </ThemeProvider>
       <Analytics />
       <SpeedInsights />

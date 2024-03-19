@@ -1,11 +1,11 @@
 import { NextPage } from "next";
 import React from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 
 const Home: NextPage = () => {
   return (
-    <div className="h-full w-full flex flex-col gap-5 justify-center items-center">
+    <div className="flex h-full w-full flex-col items-center justify-center gap-5">
       <div>Home</div>
       <Button
         onClick={() => {
@@ -30,7 +30,7 @@ const Home: NextPage = () => {
       </Button>
       <Button
         onClick={() => {
-          toast.warn("Warn");
+          toast.warning("Warn");
         }}
       >
         Warn

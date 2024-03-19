@@ -11,7 +11,9 @@ const DashBoardLayout: FunctionComponent<{
 
   if (!session || session.user.role !== allowedUserRole) return <NotFound />;
 
-  return <>{children}</>;
+  return (<>
+    {children}
+  </>);
 };
 
 export default DashBoardLayout;

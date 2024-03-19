@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
+import { createTRPCRouter, protectedProcedure } from "../trpc"
 import { TRPCError } from "@trpc/server"
 
 const clubSchema = {
@@ -65,4 +65,5 @@ const clubRouter = createTRPCRouter({
   })
 })
 
-export default clubRouter;
+export { clubSchema }
+export default clubRouter
