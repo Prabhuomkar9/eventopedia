@@ -15,11 +15,9 @@ const Profile: NextPage = () => {
   return (
     <div className="flex h-full w-full flex-col items-center justify-center">
       Profile
-      {session && session.user.role !== "USER" && (
-        <Link href={`/dashboard/${session.user.role.toLowerCase()}`}>
-          <Button>Dashboard</Button>
-        </Link>
-      )}
+      <Link href={`/dashboard/${session.user.role.toLowerCase()}`}>
+        <Button>Dashboard</Button>
+      </Link>
       <ProfileIcon />
       <SignOut />
     </div>

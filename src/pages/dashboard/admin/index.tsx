@@ -7,7 +7,7 @@ import { Input } from "~/components/ui/input";
 import { api } from "~/utils/api";
 
 const Admin: NextPage = () => {
-  const { data } = api.user.getMe.useQuery();
+  const data = api.user.getMe.useQuery();
 
   const createClub = api.club.createClub.useMutation({
     onSuccess: () => {
