@@ -4,9 +4,8 @@ import Footer from "../footer";
 import { ThemeProvider } from "~/components/providers/themeProvider";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import CustomHead from "../head";
+import { Toaster } from "../ui/sonner";
 
 const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   return (
@@ -20,12 +19,12 @@ const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
       >
         <NavBar />
         <main
-          className={`bg-black text-white relative min-h-screen min-w-screen`}
+          className={`min-w-screen relative flex min-h-screen flex-col items-center justify-center bg-black text-white`}
         >
           {children}
         </main>
         <Footer />
-        <ToastContainer />
+        <Toaster />
       </ThemeProvider>
       <Analytics />
       <SpeedInsights />
