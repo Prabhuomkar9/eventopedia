@@ -8,15 +8,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 const Admin: NextPage = () => {
   return (
     <DashBoardLayout allowedUserRole="ADMIN">
-      <Tabs defaultValue="branch" className="w-full">
+      <Tabs
+        defaultValue="branch"
+        className="flex h-full w-full flex-col items-center justify-start p-3"
+      >
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="branch">Branch</TabsTrigger>
           <TabsTrigger value="club">Club</TabsTrigger>
         </TabsList>
-        <TabsContent
-          value="branch"
-          className="flex items-center justify-center"
-        >
+        <TabsContent value="branch">
           <CreateBranchForm />
         </TabsContent>
         <TabsContent value="club">

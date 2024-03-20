@@ -16,6 +16,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { createClubSchema } from "~/server/schema/club";
 import { api } from "~/utils/api";
+import { Label } from "~/components/ui/label";
 
 const CreateClubForm = () => {
   const formSchema = createClubSchema;
@@ -50,34 +51,31 @@ const CreateClubForm = () => {
   return (
     <Form {...form}>
       <form
-        className="flex flex-row items-center justify-center gap-5"
+        className="flex flex-col items-center justify-center gap-5"
         onSubmit={handleOnSubmit}
       >
+        <Label className="text-4xl font-bold">Create Club</Label>
         <FormField
           control={form.control}
           name="name"
-          render={() => (
+          render={({ field }) => (
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Club Name" {...form} />
+                <Input placeholder="Club Name" {...field} />
               </FormControl>
-              <FormDescription>Description</FormDescription>
-              <FormMessage>Message</FormMessage>
             </FormItem>
           )}
         />
         <FormField
           control={form.control}
           name="description"
-          render={() => (
+          render={({ field }) => (
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Input placeholder="Club Description" {...form} />
+                <Input placeholder="Club Description" {...field} />
               </FormControl>
-              <FormDescription>Description</FormDescription>
-              <FormMessage>Message</FormMessage>
             </FormItem>
           )}
         />

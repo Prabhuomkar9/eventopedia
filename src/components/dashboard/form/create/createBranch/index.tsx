@@ -16,6 +16,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { createBranchSchema } from "~/server/schema/branch";
 import { api } from "~/utils/api";
+import { Label } from "~/components/ui/label";
 
 const CreateBranchForm = () => {
   const formSchema = createBranchSchema;
@@ -55,62 +56,57 @@ const CreateBranchForm = () => {
   return (
     <Form {...form}>
       <form
-        className="flex flex-row items-center justify-center gap-5"
+        className="flex flex-col items-center justify-center gap-5"
         onSubmit={handleOnSubmit}
       >
+        <Label className="text-4xl font-bold">Create Branch</Label>
         <FormField
           control={form.control}
           name="name"
-          render={() => (
+          render={({ field }) => (
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Branch Name" {...form} />
+                <Input placeholder="Branch Name" {...field} />
               </FormControl>
-              <FormDescription>Description</FormDescription>
-              <FormMessage>Message</FormMessage>
+              {/* <FormDescription>Description</FormDescription> */}
+              {/* <FormMessage>Message</FormMessage> */}
             </FormItem>
           )}
         />
         <FormField
           control={form.control}
           name="description"
-          render={() => (
+          render={({ field }) => (
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Input placeholder="Branch Description" {...form} />
+                <Input placeholder="Branch Description" {...field} />
               </FormControl>
-              <FormDescription>Description</FormDescription>
-              <FormMessage>Message</FormMessage>
             </FormItem>
           )}
         />
         <FormField
           control={form.control}
           name="shortName"
-          render={() => (
+          render={({ field }) => (
             <FormItem>
               <FormLabel>Short Name</FormLabel>
               <FormControl>
-                <Input placeholder="Short Name" {...form} />
+                <Input placeholder="Short Name" {...field} />
               </FormControl>
-              <FormDescription>Description</FormDescription>
-              <FormMessage>Message</FormMessage>
             </FormItem>
           )}
         />
         <FormField
           control={form.control}
           name="location"
-          render={() => (
+          render={({ field }) => (
             <FormItem>
               <FormLabel>Location</FormLabel>
               <FormControl>
-                <Input placeholder="Location" {...form} />
+                <Input placeholder="Location" {...field} />
               </FormControl>
-              <FormDescription>Description</FormDescription>
-              <FormMessage>Message</FormMessage>
             </FormItem>
           )}
         />
