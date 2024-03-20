@@ -7,13 +7,37 @@ const DashBoardLayout: FunctionComponent<{
   allowedUserRole: Role;
   children: ReactNode;
 }> = ({ allowedUserRole, children }) => {
-  const { data: session, status, update } = useSession();
+  const { data: session, status } = useSession();
 
-  if (!session || session.user.role !== allowedUserRole) return <NotFound />;
+  if (status === "loading")
+    return (
+      // TODO:Change loader
+      <div>
+        <div>loader</div>
+      </div>
+    );
 
-  return (<>
-    {children}
-  </>);
+  if (!session)
+    return (
+      // TODO: change this to a better component
+      <div>
+        <div>hello</div>
+      </div>
+    );
+
+  if (session.user.role !== allowedUserRole) return <NotFound />;
+
+  return (
+    <>
+      <div className="p-5">
+        <p className="text-5xl font-medium">
+          {allowedUserRole[0] + allowedUserRole.toLowerCase().slice(1)}{" "}
+          Dashboard
+        </p>
+      </div>
+      {children}
+    </>
+  );
 };
 
 export default DashBoardLayout;

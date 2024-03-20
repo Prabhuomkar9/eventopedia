@@ -63,12 +63,12 @@ model Event {
   // Developer defined
   id            String     @id @default(cuid())
   name          String
-  description   String?
+  description   String
   bannerImage   String?
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
   fees          Int        @default(0)
-  noOfRounds    Int        @default(0)
+  noOfRounds    Int        @default(1)
   eventType     EventType  @default(INDIVIDUAL)
   venue         String?
   minTeamSize   Int        @default(1)

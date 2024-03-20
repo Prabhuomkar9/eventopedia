@@ -1,4 +1,4 @@
-import React, { type FormEvent } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -7,7 +7,6 @@ import { Button } from "~/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -34,16 +33,9 @@ const CreateBranchForm = () => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      shortName: "",
-      description: "",
-      location: "",
-    },
   });
 
-  const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleOnSubmit = (data: z.infer<typeof formSchema>) => {
     toast.loading("Adding Branch");
     createBranch.mutate({
       name: form.getValues("name"),
@@ -57,7 +49,7 @@ const CreateBranchForm = () => {
     <Form {...form}>
       <form
         className="flex flex-col items-center justify-center gap-5"
-        onSubmit={handleOnSubmit}
+        onSubmit={form.handleSubmit(handleOnSubmit)}
       >
         <Label className="text-4xl font-bold">Create Branch</Label>
         <FormField
@@ -69,8 +61,7 @@ const CreateBranchForm = () => {
               <FormControl>
                 <Input placeholder="Branch Name" {...field} />
               </FormControl>
-              {/* <FormDescription>Description</FormDescription> */}
-              {/* <FormMessage>Message</FormMessage> */}
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -83,6 +74,7 @@ const CreateBranchForm = () => {
               <FormControl>
                 <Input placeholder="Branch Description" {...field} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -95,6 +87,7 @@ const CreateBranchForm = () => {
               <FormControl>
                 <Input placeholder="Short Name" {...field} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -107,6 +100,7 @@ const CreateBranchForm = () => {
               <FormControl>
                 <Input placeholder="Location" {...field} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />

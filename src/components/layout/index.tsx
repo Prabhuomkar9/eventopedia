@@ -13,18 +13,18 @@ const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
       <CustomHead />
       <ThemeProvider
         attribute="class"
-        defaultTheme="system"
+        defaultTheme="dark"
         enableSystem
         disableTransitionOnChange
       >
         <NavBar />
         <main
-          className={`min-w-screen relative flex min-h-screen flex-col items-center justify-center bg-black text-white`}
+          className={`min-w-screen relative flex min-h-screen flex-col items-center justify-center dark:bg-black dark:text-white`}
         >
           {children}
+          <Toaster richColors position="top-center" />
         </main>
         <Footer />
-        <Toaster />
       </ThemeProvider>
       <Analytics />
       <SpeedInsights />
