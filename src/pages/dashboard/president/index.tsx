@@ -1,5 +1,4 @@
-import { Branch } from "@prisma/client";
-import { NextPage } from "next";
+import { type NextPage } from "next";
 import React from "react";
 import DashBoardLayout from "~/components/layout/dashBoardLayout";
 
