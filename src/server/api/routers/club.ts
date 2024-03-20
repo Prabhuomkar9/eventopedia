@@ -1,69 +1,153 @@
-import { z } from "zod"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 import { TRPCError } from "@trpc/server"
-
-const clubSchema = {
-  // Create
-  createClub: z.object({
-    name: z.string(),
-    description: z.string()
-  }),
-
-  // Retrieve
-  getClub: z.object({
-    id: z.string()
-  }),
-  getAllClubs: z.object({}),
-
-  // Update
-  updateClub: z.object({
-    id: z.string(),
-    name: z.string().optional(),
-    description: z.string().optional()
-  }),
-
-  // Delete
-  deleteClub: z.object({
-    id: z.string()
-  })
-}
+import {
+  createClubSchema,
+  getClubSchema,
+  getAllClubsSchema,
+  updateClubSchema,
+  deleteClubSchema
+} from "~/server/schema/club"
 
 const clubRouter = createTRPCRouter({
-  createClub: protectedProcedure.input(z.object({
-    name: z.string(),
-    description: z.string(),
-  })).mutation(async ({ ctx, input }) => {
-    if (ctx.session.user.role !== "ADMIN") {
-      throw new TRPCError({
-        code: "FORBIDDEN",
-        message: "You are not authorized to create a club"
-      })
-    }
-
-    ctx.db.club.create({
-      data: {
-        name: input.name,
-        description: input.description,
-        members: {
-          connect: { id: ctx.session.user.id }
-        },
-        president: {
-          connect: { id: ctx.session.user.id }
-        }
-      }
-    })
-      .then(club => {
-        return club
-      })
-      .catch(error => {
-        console.log(error)
+  // Create
+  createClub: protectedProcedure
+    .input(createClubSchema)
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.session.user.role !== "ADMIN") {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while creating the club"
+          code: "FORBIDDEN",
+          message: "You are not authorized to create a club"
         })
+      }
+
+      ctx.db.club.create({
+        data: {
+          name: input.name,
+          description: input.description,
+          members: {
+            connect: { id: ctx.session.user.id }
+          },
+          president: {
+            connect: { id: ctx.session.user.id }
+          }
+        }
       })
-  })
+        .then(club => {
+          return club
+        })
+        .catch(error => {
+          console.log(error)
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "An error occurred while creating the club"
+          })
+        })
+    }),
+
+  // Retrieve
+  getClub: protectedProcedure
+    .input(getClubSchema)
+    .query(async ({ ctx, input }) => {
+      if (ctx.session.user.role !== "ADMIN") {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You are not authorized to view a club"
+        })
+      }
+
+      return ctx.db.club.findUnique({
+        where: { id: input.id }
+      })
+        .then(club => {
+          return club
+        })
+        .catch(error => {
+          console.log(error)
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "An error occurred while fetching the club"
+          })
+        })
+    }),
+
+  getAllClubs: protectedProcedure
+    .input(getAllClubsSchema)
+    .query(async ({ ctx }) => {
+      if (ctx.session.user.role !== "ADMIN") {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You are not authorized to view clubs"
+        })
+      }
+
+      return ctx.db.club.findMany()
+        .then(clubs => {
+          return clubs
+        })
+        .catch(error => {
+          console.log(error)
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "An error occurred while fetching the clubs"
+          })
+        })
+    }),
+
+  // Update
+  updateClub: protectedProcedure
+    .input(updateClubSchema)
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.session.user.role !== "ADMIN") {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You are not authorized to update a club"
+        })
+      }
+
+      return ctx.db.club.update({
+        where: { id: input.id },
+        data: {
+          name: input.name,
+          description: input.description
+        }
+      })
+        .then(club => {
+          return club
+        })
+        .catch(error => {
+          console.log(error)
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "An error occurred while updating the club"
+          })
+        })
+    }),
+
+  // Delete
+  deleteClub: protectedProcedure
+    .input(deleteClubSchema)
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.session.user.role !== "ADMIN") {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You are not authorized to delete a club"
+        })
+      }
+
+      return ctx.db.club.delete({
+        where: { id: input.id }
+      })
+        .then(club => {
+          return club
+        })
+        .catch(error => {
+          console.log(error)
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "An error occurred while deleting the club"
+          })
+        })
+    })
 })
 
-export { clubSchema }
 export default clubRouter

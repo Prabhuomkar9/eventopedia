@@ -14,17 +14,18 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
-import { branchSchema } from "~/server/api/routers/branch";
+import { createBranchSchema } from "~/server/schema/branch";
 import { api } from "~/utils/api";
 
 const CreateBranchForm = () => {
-  const formSchema = branchSchema.createBranch;
+  const formSchema = createBranchSchema;
   const createBranch = api.branch.createBranch.useMutation({
     onSuccess: () => {
       toast.dismiss();
       toast.success("Added Branch");
     },
-    onError: () => {
+    onError: (error) => {
+      console.log(error.data, error.message, error.shape);
       toast.dismiss();
       toast.error("Adding Branch Failed");
     },

@@ -1,41 +1,17 @@
-import { z } from "zod"
 import { TRPCError } from "@trpc/server"
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
-
-const branchSchema = {
-  // Create
-  createBranch: z.object({
-    name: z.string(),
-    shortName: z.string(),
-    description: z.string().optional(),
-    location: z.string().optional()
-  }),
-
-  // Retrieve
-  getBranch: z.object({
-    id: z.string()
-  }),
-  getAllBranches: z.object({}),
-
-  // Update
-  updateBranch: z.object({
-    id: z.string(),
-    name: z.string().optional(),
-    shortName: z.string().optional(),
-    description: z.string().optional(),
-    location: z.string().optional()
-  }),
-
-  // Delete
-  deleteBranch: z.object({
-    id: z.string()
-  })
-}
+import { createTRPCRouter, protectedProcedure } from "../trpc"
+import {
+  createBranchSchema,
+  getBranchSchema,
+  getAllBranchesSchema,
+  updateBranchSchema,
+  deleteBranchSchema
+} from "~/server/schema/branch"
 
 const branchRouter = createTRPCRouter({
   // Create
   createBranch: protectedProcedure
-    .input(branchSchema.createBranch)
+    .input(createBranchSchema)
     .mutation(({ ctx, input }) => {
       if (ctx.session.user.role !== "ADMIN")
         throw new TRPCError({
@@ -65,7 +41,7 @@ const branchRouter = createTRPCRouter({
 
   // Retrieve
   getBranch: protectedProcedure
-    .input(branchSchema.getBranch)
+    .input(getBranchSchema)
     .query(({ ctx, input }) => {
       ctx.db.branch.findUnique({
         where: { id: input.id }
@@ -82,7 +58,7 @@ const branchRouter = createTRPCRouter({
         })
     }),
   getAllBranches: protectedProcedure
-    .input(branchSchema.getAllBranches)
+    .input(getAllBranchesSchema)
     .query(({ ctx }) => {
       ctx.db.branch.findMany()
         .then(branches => {
@@ -99,7 +75,7 @@ const branchRouter = createTRPCRouter({
 
   // Update
   updateBranch: protectedProcedure
-    .input(branchSchema.updateBranch)
+    .input(updateBranchSchema)
     .mutation(({ ctx, input }) => {
       if (ctx.session.user.role !== "ADMIN")
         throw new TRPCError({
@@ -130,7 +106,7 @@ const branchRouter = createTRPCRouter({
 
   // Delete
   deleteBranch: protectedProcedure
-    .input(branchSchema.deleteBranch)
+    .input(deleteBranchSchema)
     .mutation(({ ctx, input }) => {
       if (ctx.session.user.role !== "ADMIN")
         throw new TRPCError({
@@ -154,5 +130,4 @@ const branchRouter = createTRPCRouter({
     })
 })
 
-export { branchSchema }
 export default branchRouter
