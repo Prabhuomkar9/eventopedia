@@ -9,21 +9,7 @@ const Events = () => {
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="flex flex-col items-center justify-center">
-        <h1>All</h1>
-        {getAllEvents.data?.map((event) => {
-          return (
-            <div
-              key={event.id}
-              className="flex flex-col items-center justify-center gap-5"
-            >
-              <p>{event.name}</p>
-            </div>
-          );
-        })}
-      </div>
-      <Button onClick={() => getAllEvents.refetch()}>Get All Events</Button>
-      <div className="flex flex-col items-center justify-center">
-        <h1>Pubklised</h1>
+        <h1 className="m-5 text-5xl">Publised Events</h1>
         {getPublishedEvents.data?.map((event) => {
           return (
             <div
@@ -35,7 +21,7 @@ const Events = () => {
           );
         })}
       </div>
-      <Button onClick={() => getPublishedEvents.refetch()}>
+      <Button className="m-4" onClick={() => getPublishedEvents.refetch()}>
         Get Published Events
       </Button>
     </div>

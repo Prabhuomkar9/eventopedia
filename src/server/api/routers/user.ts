@@ -46,17 +46,7 @@ const userRouter = createTRPCRouter({
 
   getAllUsers: protectedProcedure
     .query(({ ctx }) => {
-      ctx.db.user.findMany()
-        .then((users) => {
-          return users
-        })
-        .catch((e) => {
-          console.log(e)
-          throw new TRPCError({
-            code: "INTERNAL_SERVER_ERROR",
-            message: "Something went wrong"
-          })
-        })
+      return ctx.db.user.findMany()
     }
     ),
 
