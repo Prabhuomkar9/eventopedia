@@ -19,7 +19,7 @@ const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
       >
         <NavBar />
         <main
-          className={`min-w-screen relative flex min-h-screen flex-col items-center justify-center dark:bg-black dark:text-white`}
+          className={`min-w-screen relative flex min-h-screen flex-col items-center justify-center bg-[url("/assets/svg/gggrain2.svg")] bg-cover dark:text-white`}
         >
           {children}
           <Toaster richColors position="top-center" />

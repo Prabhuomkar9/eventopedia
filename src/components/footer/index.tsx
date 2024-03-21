@@ -2,8 +2,8 @@ import React, { FunctionComponent } from "react";
 
 const Footer: FunctionComponent = () => {
   return (
-    <footer className="w-full bg-slate-800 text-white flex justify-center items-center min-h-40">
-      footer
+    <footer className="flex w-full items-center justify-center bg-slate-800 p-3 text-white">
+      <p className="text-xl">Made with 💖 by students</p>
     </footer>
   );
 };

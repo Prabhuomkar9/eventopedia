@@ -7,8 +7,8 @@ import AuthButtons from "./authButtons";
 const NavBar: FunctionComponent = () => {
   return (
     <>
-      <nav className="w-full hidden md:flex flex-row justify-center items-center h-16 bg-slate-500 ">
-        <ul className="w-full px-32 flex flex-row gap-3 justify-around items-center">
+      <nav className="hidden h-16 w-full flex-row items-center justify-center bg-purple-500/50 md:flex ">
+        <ul className="flex w-full flex-row items-center justify-around gap-3 px-32">
           {navLinks.map((link, idx) => (
             <li key={idx}>
               <Link href={link.url}>{link.name}</Link>
