@@ -1,9 +1,9 @@
 import { type NextPage } from "next";
 import React from "react";
-import CreateBranchForm from "~/components/dashboard/form/create/createBranch";
-import CreateClubForm from "~/components/dashboard/form/create/createClub";
 import DashBoardLayout from "~/components/layout/dashBoardLayout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import BranchTab from "~/components/dashboard/tabs/branchTab";
+import ClubTab from "~/components/dashboard/tabs/clubTab";
 import UserTab from "~/components/dashboard/tabs/userTab";
 import EventTab from "~/components/dashboard/tabs/eventTab";
 
@@ -21,10 +21,10 @@ const Admin: NextPage = () => {
           <TabsTrigger value="user">Users</TabsTrigger>
         </TabsList>
         <TabsContent value="branch" className="pt-6">
-          <CreateBranchForm />
+          <BranchTab />
         </TabsContent>
         <TabsContent value="club" className="pt-6">
-          <CreateClubForm />
+          <ClubTab />
         </TabsContent>
         <TabsContent
           value="event"

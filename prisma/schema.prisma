@@ -34,15 +34,13 @@ model Account {
 
 model Branch {
   // Developer defined
-  id          String  @id @default(cuid())
-  name        String
-  shortName   String
-  description String?
-  location    String?
+  id        String @id @default(cuid())
+  name      String
+  shortName String
   // Relational fields
   // 1-
   // n-
-  students    User[]
+  students  User[]
 }
 
 model Club {

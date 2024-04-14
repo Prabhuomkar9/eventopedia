@@ -5,7 +5,6 @@ import {
 import { TRPCError } from "@trpc/server";
 
 const eventRouter = createTRPCRouter({
-  // Create
   createEvent: protectedProcedure
     .input(createEventSchema)
     .mutation(async ({ input, ctx }) => {
@@ -59,14 +58,26 @@ const eventRouter = createTRPCRouter({
   publishEvent: protectedProcedure
     .input(publishEventSchema)
     .mutation(async ({ input, ctx }) => {
-      if (ctx.session.user.role !== "ADMIN") {
+      if (ctx.session.user.role !== "ADMIN" && ctx.session.user.role !== "PRESIDENT") {
         throw new TRPCError({
           code: "FORBIDDEN",
-          message: "You are not authorized to create a club"
+          message: "You are not authorized to publish an event"
         })
       }
 
-      ctx.db.event.update({
+      const event = await ctx.db.event.findUnique({
+        where: {
+          id: input.id
+        }
+      })
+
+      if (!event)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Event not found"
+        })
+
+      return await ctx.db.event.update({
         where: {
           id: input.id
         },
@@ -74,16 +85,6 @@ const eventRouter = createTRPCRouter({
           eventState: "PUBLISHED"
         }
       })
-        .then((event) => {
-          return event
-        })
-        .catch((error) => {
-          console.log(error)
-          throw new TRPCError({
-            code: "INTERNAL_SERVER_ERROR",
-            message: "An error occurred while publishing the event"
-          })
-        })
     }),
 
   getAllEvents: protectedProcedure

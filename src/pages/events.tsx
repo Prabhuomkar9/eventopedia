@@ -37,7 +37,7 @@ const Events = () => {
         })}
       </div>
       <Button className="m-4" onClick={() => getPublishedEvents.refetch()}>
-        Get Published Events
+        Refresh
       </Button>
     </div>
   );

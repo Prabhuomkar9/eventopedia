@@ -3,43 +3,36 @@ import { createTRPCRouter, protectedProcedure } from "../trpc"
 import {
   createBranchSchema,
   getBranchSchema,
-  getAllBranchesSchema,
   updateBranchSchema,
   deleteBranchSchema
 } from "~/server/schema/branch"
 
 const branchRouter = createTRPCRouter({
-  // Create
   createBranch: protectedProcedure
     .input(createBranchSchema)
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       if (ctx.session.user.role !== "ADMIN")
         throw new TRPCError({
           code: "UNAUTHORIZED",
-          message: "You are not authorized to perform this action"
+          message: "You are not authorized to create a branch"
         })
 
-      ctx.db.branch.create({
+      const branch = await ctx.db.branch.create({
         data: {
           name: input.name,
           shortName: input.shortName,
-          description: input.description,
-          location: input.location
         }
       })
-        .then(branch => {
-          return branch
+
+      if (!branch)
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "An error occurred while creating the branch"
         })
-        .catch(error => {
-          console.log(error)
-          throw new TRPCError({
-            code: "INTERNAL_SERVER_ERROR",
-            message: "An error occurred while creating the branch",
-          })
-        })
+
+      return branch
     }),
 
-  // Retrieve
   getBranch: protectedProcedure
     .input(getBranchSchema)
     .query(({ ctx, input }) => {
@@ -57,54 +50,48 @@ const branchRouter = createTRPCRouter({
           })
         })
     }),
+
   getAllBranches: protectedProcedure
-    .input(getAllBranchesSchema)
-    .query(({ ctx }) => {
-      ctx.db.branch.findMany()
-        .then(branches => {
-          return branches
+    .query(async ({ ctx }) => {
+      const branches = await ctx.db.branch.findMany()
+
+      if (!branches)
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "An error occurred while retrieving branches"
         })
-        .catch(error => {
-          console.log(error)
-          throw new TRPCError({
-            code: "INTERNAL_SERVER_ERROR",
-            message: "An error occurred while retrieving branches",
-          })
-        })
+
+      return branches
     }),
 
-  // Update
   updateBranch: protectedProcedure
     .input(updateBranchSchema)
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       if (ctx.session.user.role !== "ADMIN")
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: "You are not authorized to perform this action"
         })
 
-      ctx.db.branch.update({
+      const branch = await ctx.db.branch.findUnique({
+        where: { id: input.id }
+      })
+
+      if (!branch)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Branch not found"
+        })
+
+      return await ctx.db.branch.update({
         where: { id: input.id },
         data: {
           name: input.name,
           shortName: input.shortName,
-          description: input.description,
-          location: input.location
         }
       })
-        .then(branch => {
-          return branch
-        })
-        .catch(error => {
-          console.log(error)
-          throw new TRPCError({
-            code: "INTERNAL_SERVER_ERROR",
-            message: "An error occurred while updating the branch",
-          })
-        })
     }),
 
-  // Delete
   deleteBranch: protectedProcedure
     .input(deleteBranchSchema)
     .mutation(({ ctx, input }) => {

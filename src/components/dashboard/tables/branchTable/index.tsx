@@ -3,8 +3,9 @@ import { api } from "~/utils/api";
 import { DataTable } from "~/components/ui/data-table";
 import columns from "./columns";
 
-const UserTable: FunctionComponent = () => {
-  const { data, isLoading, isError, error } = api.user.getAllUsers.useQuery();
+const BranchTable: FunctionComponent = () => {
+  const { data, isLoading, isError, error } =
+    api.branch.getAllBranches.useQuery();
 
   if (isError) return <>{error}</>;
 
@@ -12,4 +13,5 @@ const UserTable: FunctionComponent = () => {
 
   return <DataTable columns={columns} data={data} />;
 };
-export default UserTable;
+
+export default BranchTable;

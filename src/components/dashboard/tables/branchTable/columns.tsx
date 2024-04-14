@@ -1,9 +1,9 @@
 "use client";
 
-import { type User } from "@prisma/client";
+import { type Branch } from "@prisma/client";
 import { type ColumnDef } from "@tanstack/react-table";
 
-const columns: ColumnDef<User>[] = [
+const columns: ColumnDef<Branch>[] = [
   {
     accessorKey: "id",
     header: "ID",
@@ -13,12 +13,8 @@ const columns: ColumnDef<User>[] = [
     header: "Name",
   },
   {
-    accessorKey: "email",
-    header: "Email",
-  },
-  {
-    accessorKey: "role",
-    header: "Role",
+    accessorKey: "shortName",
+    header: "Short Name",
   },
 ];
 

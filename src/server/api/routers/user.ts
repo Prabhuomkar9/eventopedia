@@ -3,10 +3,6 @@ import { createTRPCRouter, protectedProcedure } from "../trpc"
 import { TRPCError } from "@trpc/server"
 
 const userRouter = createTRPCRouter({
-  // [x]: Create
-  // nextAuth.js takes care of creating users
-
-  // [x]: Retrieve
   getMe: protectedProcedure
     .query(({ ctx }) => {
       ctx.db.user.findUnique({
@@ -50,7 +46,6 @@ const userRouter = createTRPCRouter({
     }
     ),
 
-  // [x]: Update
   updateMe: protectedProcedure
     .input(z.object({
       bio: z.string().optional(),
@@ -87,93 +82,6 @@ const userRouter = createTRPCRouter({
         })
       })
     }),
-
-  roleToAdmin: protectedProcedure
-    .input(z.object({
-      id: z.string()
-    }))
-    .mutation(({ ctx, input }) => {
-      if (ctx.session.user.role !== "ADMIN")
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "You are not authorized to perform this action"
-        })
-      ctx.db.user.update({
-        where: {
-          id: input.id
-        },
-        data: {
-          role: "ADMIN"
-        }
-      }).then((user) => {
-        return user
-      }).catch((e) => {
-        console.log(e)
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Something went wrong"
-        })
-      })
-    }),
-
-  roleToPresident: protectedProcedure
-    .input(z.object({
-      id: z.string()
-    }))
-    .mutation(({ ctx, input }) => {
-      if (ctx.session.user.role !== "ADMIN")
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "You are not authorized to perform this action"
-        })
-      ctx.db.user.update({
-        where: {
-          id: input.id
-        },
-        data: {
-          role: "PRESIDENT"
-        }
-      }).then((user) => {
-        return user
-      }).catch((e) => {
-        console.log(e)
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Something went wrong"
-        })
-      })
-    }),
-
-  roleToOrganiser: protectedProcedure
-    .input(z.object({
-      id: z.string()
-    }))
-    .mutation(({ ctx, input }) => {
-      if (ctx.session.user.role !== "ADMIN" && ctx.session.user.role === "PRESIDENT")
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "You are not authorized to perform this action"
-        })
-      ctx.db.user.update({
-        where: {
-          id: input.id
-        },
-        data: {
-          role: "ORGANISER"
-        }
-      }).then((user) => {
-        return user
-      }).catch((e) => {
-        console.log(e)
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Something went wrong"
-        })
-      })
-    }),
-
-  // [x]: Delete
-  // Do we need to delete user?
 })
 
 export default userRouter;

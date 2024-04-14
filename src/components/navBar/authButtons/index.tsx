@@ -6,7 +6,7 @@ import ProfileIcon from "~/components/profile/profileIcon";
 import { Button } from "~/components/ui/button";
 
 const AuthButtons = () => {
-  const { data: session, status, update } = useSession();
+  const { data: session, status } = useSession();
 
   return (
     <>

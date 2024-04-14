@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-// Create
 const createEventSchema = z.object({
   name: z.string(),
   description: z.string(),
@@ -9,9 +8,6 @@ const createEventSchema = z.object({
   // clubId: z.string()
 })
 
-// Retrieve
-
-// Update
 const publishEventSchema = z.object({
   id: z.string()
 })

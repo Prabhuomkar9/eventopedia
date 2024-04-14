@@ -3,7 +3,6 @@ import { TRPCError } from "@trpc/server"
 import {
   createClubSchema,
   getClubSchema,
-  getAllClubsSchema,
   updateClubSchema,
   deleteClubSchema
 } from "~/server/schema/club"
@@ -71,7 +70,6 @@ const clubRouter = createTRPCRouter({
     }),
 
   getAllClubs: protectedProcedure
-    .input(getAllClubsSchema)
     .query(async ({ ctx }) => {
       if (ctx.session.user.role !== "ADMIN") {
         throw new TRPCError({

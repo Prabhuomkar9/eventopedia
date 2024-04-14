@@ -1,6 +1,6 @@
-import { Role } from "@prisma/client";
+import { type Role } from "@prisma/client";
 import { useSession } from "next-auth/react";
-import React, { FunctionComponent, ReactNode } from "react";
+import React, { type FunctionComponent, type ReactNode } from "react";
 import NotFound from "~/pages/404";
 
 const DashBoardLayout: FunctionComponent<{

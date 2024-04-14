@@ -1,12 +1,8 @@
-import React, { FunctionComponent } from "react";
-import UserTable from "~/components/dashboard/tables/userTable";
+import React from "react";
+import UserTable from "../../tables/userTable";
 
-const UserTab: FunctionComponent = () => {
-  return (
-    <>
-      <UserTable />
-    </>
-  );
+const UserTab = () => {
+  return <UserTable />;
 };
 
 export default UserTab;

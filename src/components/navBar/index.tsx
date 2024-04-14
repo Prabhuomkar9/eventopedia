@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { type FunctionComponent } from "react";
 import Link from "next/link";
 import { navLinks } from "~/constants";
 import MobileNavBar from "./mobileNavBar";
