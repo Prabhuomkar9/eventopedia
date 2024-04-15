@@ -1,4 +1,4 @@
-import React, { FunctionComponent, ReactNode } from "react";
+import React, { type FunctionComponent, type ReactNode } from "react";
 import NavBar from "../navBar";
 import Footer from "../footer";
 import { ThemeProvider } from "~/components/providers/themeProvider";
@@ -19,7 +19,7 @@ const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
       >
         <NavBar />
         <main
-          className={`min-w-screen -bg-[url("/assets/svg/gggrain2.svg")] relative flex min-h-screen flex-col items-center justify-center bg-cover dark:text-white`}
+          className={`min-w-screen -bg-[url("/assets/svg/gggrain2.svg")] relative flex min-h-screen flex-col items-center justify-center bg-cover pt-20 dark:text-white`}
         >
           {children}
           <Toaster richColors position="top-center" />

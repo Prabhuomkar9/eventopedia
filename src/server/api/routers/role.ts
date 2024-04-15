@@ -1,17 +1,25 @@
 import { createTRPCRouter, protectedProcedure } from '../trpc'
 import { TRPCError } from "@trpc/server";
-import { promoteToAdminSchema, promoteToOrganiserSchema, promoteToPreseidentSchema } from '~/server/schema/role';
+import {
+  promotionSchema,
+  demotionSchema
+} from '~/server/schema/role';
 
 const roleRouter = createTRPCRouter({
-  promoteToAdmin: protectedProcedure
-    .input(promoteToAdminSchema)
+  promote: protectedProcedure
+    .input(promotionSchema)
     .mutation(async ({ input, ctx }) => {
-      if (ctx.session.user.role !== "ADMIN") {
+      if (ctx.session.user.role !== "ADMIN")
         throw new TRPCError({
           code: "FORBIDDEN",
-          message: "You are not authorized to promote a user to admin"
+          message: "You are not authorized to promote a user"
         })
-      }
+
+      if (ctx.session.user.id === input.userId)
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "You cannot promote yourself"
+        })
 
       const user = await ctx.db.user.findUnique({
         where: {
@@ -19,39 +27,42 @@ const roleRouter = createTRPCRouter({
         }
       })
 
-      if (!user) {
+      if (!user)
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "User not found"
         })
-      }
 
-      if (user.role === "ADMIN") {
+      if (user.role === "ADMIN")
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "User is already an admin"
+          message: "You cannot promote a user with role ADMIN"
         })
-      }
 
       return await ctx.db.user.update({
         where: {
           id: input.userId
         },
         data: {
-          role: "ADMIN"
+          role: user.role === "USER" ? "ORGANISER" : user.role === "ORGANISER" ? "PRESIDENT" : "ADMIN"
         }
       })
     }),
 
-  promoteToPresident: protectedProcedure
-    .input(promoteToPreseidentSchema)
+  demote: protectedProcedure
+    .input(demotionSchema)
     .mutation(async ({ input, ctx }) => {
-      if (ctx.session.user.role !== "ADMIN") {
+      if (ctx.session.user.role !== "ADMIN")
         throw new TRPCError({
           code: "FORBIDDEN",
-          message: "You are not authorized to promote a user to president"
+          message: "You are not authorized to demote a user"
         })
-      }
+
+      if (ctx.session.user.id === input.userId)
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "You cannot demote yourself"
+        })
 
       const user = await ctx.db.user.findUnique({
         where: {
@@ -59,69 +70,27 @@ const roleRouter = createTRPCRouter({
         }
       })
 
-      if (!user) {
+      if (!user)
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "User not found"
         })
-      }
 
-      if (user.role === "PRESIDENT") {
+      if (user.role === "USER")
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "User is already a president"
+          message: "You cannot demote a user with role USER"
         })
-      }
 
       return await ctx.db.user.update({
         where: {
           id: input.userId
         },
         data: {
-          role: "PRESIDENT"
+          role: user.role === "ADMIN" ? "PRESIDENT" : user.role === "PRESIDENT" ? "ORGANISER" : "USER"
         }
       })
     }),
-
-  promoteToOrganiser: protectedProcedure
-    .input(promoteToOrganiserSchema)
-    .mutation(async ({ input, ctx }) => {
-      if (ctx.session.user.role !== "ADMIN") {
-        throw new TRPCError({
-          code: "FORBIDDEN",
-          message: "You are not authorized to promote a user to organiser"
-        })
-      }
-
-      const user = await ctx.db.user.findUnique({
-        where: {
-          id: input.userId
-        }
-      })
-
-      if (!user) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "User not found"
-        })
-      }
-
-      if (user.role === "ORGANISER") {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "User is already an organiser"
-        })
-      }
-
-      return await ctx.db.user.update({
-        where: {
-          id: input.userId
-        },
-        data: {
-          role: "ORGANISER"
-        }
-      })
-    })
 })
 
 export default roleRouter

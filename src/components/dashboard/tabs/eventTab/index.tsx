@@ -1,4 +1,4 @@
-import React from "react";
+import React, { type FunctionComponent } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { type z } from "zod";
@@ -15,7 +15,6 @@ import {
 import { Input } from "~/components/ui/input";
 import { createEventSchema } from "~/server/schema/event";
 import { api } from "~/utils/api";
-import { Label } from "~/components/ui/label";
 import EventTable from "../../tables/eventTable";
 import {
   Dialog,
@@ -24,9 +23,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
+import { type Role } from "@prisma/client";
 
-const EventTab = () => {
+interface Props {
+  role: Role;
+}
+
+const EventTab: FunctionComponent<Props> = ({ role }) => {
   const formSchema = createEventSchema;
+
   const createEvent = api.event.createEvent.useMutation({
     onSuccess: () => {
       toast.dismiss();
@@ -47,7 +52,7 @@ const EventTab = () => {
     createEvent.mutate({
       name: data.name,
       description: data.description,
-      // clubId: "cltzwqdff0001r1zm7p7hsjor",
+      clubId: data.clubId,
     });
   };
 
@@ -93,6 +98,19 @@ const EventTab = () => {
                     </FormItem>
                   )}
                 />
+                <FormField
+                  control={form.control}
+                  name="clubId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Club ID</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Club ID" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <Button type="submit">Create Event</Button>
               </form>
             </Form>
@@ -105,36 +123,3 @@ const EventTab = () => {
 };
 
 export default EventTab;
-
-//  const [eventId, setEventId] = useState<string>("");
-
-//  const publishEvent = api.ev ent.publishEvent.useMutation({
-//    onSuccess: () => {
-//      toast.dismiss();
-//      toast.success("Published Event");
-//    },
-//    onError: (error) => {
-//      console.log(error.data, error.message, error.shape);
-//      toast.dismiss();
-//      toast.error("Publishing Event Failed");
-//    },
-//  });
-//  return (
-//    <>
-//      <CreateEventForm />
-//      <h1 className="mt-10 text-4xl">Plublish Event</h1>
-//      <Input
-//        placeholder="Event Id"
-//        onChange={(e) => setEventId(e.target.value)}
-//        value={eventId}
-//      />
-//      <Button
-//        onClick={() => {
-//          toast.loading("Publishing Event");
-//          publishEvent.mutate({ id: eventId });
-//        }}
-//      >
-//        Publish
-//      </Button>
-//    </>
-//  );

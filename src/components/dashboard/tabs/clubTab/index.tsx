@@ -1,4 +1,4 @@
-import React from "react";
+import React, { type FunctionComponent } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { type z } from "zod";
@@ -23,8 +23,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
+import { type Role } from "@prisma/client";
 
-const ClubTab = () => {
+interface Props {
+  role: Role;
+}
+
+const ClubTab: FunctionComponent<Props> = ({ role }) => {
   const formSchema = createClubSchema;
   const createClub = api.club.createClub.useMutation({
     onSuccess: () => {

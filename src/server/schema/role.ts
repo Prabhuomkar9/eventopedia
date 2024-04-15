@@ -1,21 +1,16 @@
 import { z } from 'zod';
 
-const promoteToAdminSchema = z.object({
-  userId: z.string()
-})
 
-const promoteToPreseidentSchema = z.object({
+const promotionSchema = z.object({
   userId: z.string(),
-  clubId: z.string()
-})
+});
 
-const promoteToOrganiserSchema = z.object({
+const demotionSchema = z.object({
   userId: z.string(),
-  clubId: z.string()
-})
+});
+
 
 export {
-  promoteToAdminSchema,
-  promoteToPreseidentSchema,
-  promoteToOrganiserSchema
+  promotionSchema,
+  demotionSchema
 }

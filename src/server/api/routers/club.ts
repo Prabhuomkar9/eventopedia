@@ -78,17 +78,11 @@ const clubRouter = createTRPCRouter({
         })
       }
 
-      return ctx.db.club.findMany()
-        .then(clubs => {
-          return clubs
-        })
-        .catch(error => {
-          console.log(error)
-          throw new TRPCError({
-            code: "INTERNAL_SERVER_ERROR",
-            message: "An error occurred while fetching the clubs"
-          })
-        })
+      return await ctx.db.club.findMany({
+        include: {
+          president: true
+        }
+      })
     }),
 
   // Update

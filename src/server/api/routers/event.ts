@@ -17,13 +17,12 @@ const eventRouter = createTRPCRouter({
 
       const club = await ctx.db.club.findUnique({
         where: {
-          id: "cltzwqdff0001r1zm7p7hsjor"
-
+          id: "cluzoe9kr0004mqh973ohu2ko"
           // id: input.clubId
         }
       })
 
-      ctx.db.event.create({
+      const event = await ctx.db.event.create({
         data: {
           name: input.name,
           description: input.description,
@@ -43,16 +42,8 @@ const eventRouter = createTRPCRouter({
           },
         }
       })
-        .then((event) => {
-          return event
-        })
-        .catch((error) => {
-          console.log(error)
-          // throw new TRPCError({
-          //   code: "INTERNAL_SERVER_ERROR",
-          //   message: "An error occurred while creating the event"
-          // })
-        })
+
+      return event
     }),
 
   publishEvent: protectedProcedure
@@ -89,7 +80,12 @@ const eventRouter = createTRPCRouter({
 
   getAllEvents: protectedProcedure
     .query(async ({ ctx }) => {
-      return ctx.db.event.findMany()
+      return ctx.db.event.findMany({
+        include: {
+          club: true,
+          organisers: true
+        }
+      })
     }),
 
   getPublishedEvents: protectedProcedure
@@ -97,6 +93,10 @@ const eventRouter = createTRPCRouter({
       return ctx.db.event.findMany({
         where: {
           eventState: "PUBLISHED"
+        },
+        include: {
+          club: true,
+          organisers: true
         }
       })
     }),

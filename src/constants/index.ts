@@ -10,6 +10,4 @@ export const siteMetadata = {
 export const navLinks = [
   { name: 'Home', url: '/' },
   { name: 'Events', url: '/events' },
-  { name: 'About', url: '/about' },
-  { name: 'Contact', url: '/contact' },
 ];

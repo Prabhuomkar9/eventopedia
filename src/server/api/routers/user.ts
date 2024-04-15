@@ -1,23 +1,24 @@
 import { z } from "zod"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 import { TRPCError } from "@trpc/server"
+import { updateMeSchema } from "~/server/schema/user"
 
 const userRouter = createTRPCRouter({
   getMe: protectedProcedure
-    .query(({ ctx }) => {
-      ctx.db.user.findUnique({
+    .query(async ({ ctx }) => {
+      const user = await ctx.db.user.findUnique({
         where: {
           id: ctx.session.user.id
+        },
+        include: {
+          branch: true,
+          clubs: true,
+          organisingEvents: true,
+          presidentOf: true
         }
-      }).then((user) => {
-        return user
-      }).catch((e) => {
-        console.log(e)
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Something went wrong"
-        })
       })
+
+      return user
     }),
 
   getUserById: protectedProcedure
@@ -41,21 +42,28 @@ const userRouter = createTRPCRouter({
     }),
 
   getAllUsers: protectedProcedure
-    .query(({ ctx }) => {
-      return ctx.db.user.findMany()
+    .query(async ({ ctx }) => {
+      return await ctx.db.user.findMany()
     }
     ),
 
   updateMe: protectedProcedure
-    .input(z.object({
-      bio: z.string().optional(),
-      branchId: z.string().optional(),
-      clubId: z.string().array().optional(),
-      phoneNumber: z.string().regex(/^\d{10}$/).optional(),
-      usn: z.string().regex(/^[a-zA-Z0-9]{3}\d{2}[a-zA-Z]{2}\d{3}$/).optional()
-    }))
-    .mutation(({ ctx, input }) => {
-      ctx.db.user.update({
+    .input(updateMeSchema)
+    .mutation(async ({ ctx, input }) => {
+      const user = await ctx.db.user.findUnique({
+        where: {
+          id: ctx.session.user.id
+        }
+      })
+
+      if (!user) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User not found"
+        })
+      }
+
+      const updatedUser = await ctx.db.user.update({
         where: {
           id: ctx.session.user.id
         },
@@ -72,16 +80,10 @@ const userRouter = createTRPCRouter({
           phoneNumber: input.phoneNumber,
           usn: input.usn
         }
-      }).then((user) => {
-        return user
-      }).catch((e) => {
-        console.log(e)
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Something went wrong"
-        })
       })
-    }),
+
+      return updatedUser
+    })
 })
 
 export default userRouter;

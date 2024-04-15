@@ -1,35 +1,60 @@
 "use client";
 
-import { type Event } from "@prisma/client";
+import { type Club, type Event, type User } from "@prisma/client";
 import { type ColumnDef } from "@tanstack/react-table";
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
+import { api } from "~/utils/api";
+import { toast } from "sonner";
 
-const columns: ColumnDef<Event>[] = [
-  {
-    accessorKey: "id",
-    header: "ID",
-    cell: ({ row }) => <div>{row.getValue("id")}</div>,
-  },
+const columns: ColumnDef<
+  Event & {
+    club: Club;
+    organisers: User[];
+  }
+>[] = [
   {
     accessorKey: "name",
     header: "Name",
-    cell: ({ row }) => <div>{row.getValue("name")}</div>,
+    cell: ({ row }) => <div>{row.original.name}</div>,
+  },
+  {
+    accessorKey: "eventType",
+    header: "Event Type",
+    cell: ({ row }) => <div>{row.original.eventType}</div>,
+  },
+  {
+    accessorKey: "eventState",
+    header: "Event State",
+    cell: ({ row }) => <div>{row.original.eventState}</div>,
+  },
+  {
+    id: "club",
+    header: "Club",
+    cell: ({ row }) => <div>{row.original.club.name}</div>,
   },
   {
     id: "actions",
-    enableHiding: false,
+    header: "Actions",
     cell: ({ row }) => {
       const event = row.original;
+
+      const publishEvent = api.event.publishEvent.useMutation({
+        onSuccess: (event) => {
+          toast.dismiss();
+          toast.success(`Event ${event.name} published successfully`);
+        },
+        onError: (error) => {
+          toast.dismiss();
+          toast.error(error.message);
+        },
+      });
 
       return (
         <DropdownMenu>
@@ -40,16 +65,24 @@ const columns: ColumnDef<Event>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => navigator.clipboard.writeText(event.id)}
             >
-              Copy event ID
+              Copy Event ID
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuLabel>Hello</DropdownMenuLabel>
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => navigator.clipboard.writeText(event.club.id)}
+            >
+              Copy Club ID
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                toast.loading("Publishing event...");
+                publishEvent.mutate({ id: event.id });
+              }}
+            >
+              Publish Event
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

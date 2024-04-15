@@ -8,6 +8,7 @@ const SignOut = () => {
   return (
     <div>
       <Button
+        variant="destructive"
         onClick={async () => {
           await signOut({ callbackUrl: "/", redirect: true });
         }}
