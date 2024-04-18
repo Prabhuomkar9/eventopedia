@@ -1,4 +1,5 @@
 import React from "react";
+import EventCard from "~/components/avin/eventCard";
 import EventSwiper from "~/components/avin/eventSwiper/eventSwiper";
 import { Button } from "~/components/ui/button";
 import { api } from "~/utils/api";
@@ -9,8 +10,8 @@ const Events = () => {
   return (
     <div className="flex flex-col items-center justify-center overflow-hidden">
       <div className="flex flex-col items-center justify-center">
-        <h1 className="m-5 text-5xl">Publised Events</h1>
         <EventSwiper />
+        <EventCard />
       </div>
       <Button className="m-4" onClick={() => getPublishedEvents.refetch()}>
         Refresh

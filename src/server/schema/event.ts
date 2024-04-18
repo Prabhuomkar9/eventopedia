@@ -12,7 +12,14 @@ const publishEventSchema = z.object({
   id: z.string()
 })
 
+const addUserToEventSchema = z.object({
+  eventId: z.string(),
+  userId: z.string()
+})
+
+
 export {
   createEventSchema,
-  publishEventSchema
+  publishEventSchema,
+  addUserToEventSchema
 }

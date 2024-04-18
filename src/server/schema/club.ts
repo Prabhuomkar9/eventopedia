@@ -19,10 +19,9 @@ const deleteClubSchema = z.object({
   id: z.string()
 })
 
-
 export {
   createClubSchema,
   getClubSchema,
   updateClubSchema,
-  deleteClubSchema
+  deleteClubSchema,
 }

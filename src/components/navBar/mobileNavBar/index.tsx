@@ -32,14 +32,14 @@ const MobileNavBar = () => {
         } px-2 lg:hidden`}
       >
         <div
-          className={`z-[60] flex w-full flex-col justify-center gap-3 rounded-xl border border-white/30 bg-white/5 bg-clip-padding py-5 backdrop-blur-lg backdrop-filter hover:border-white/40 lg:hidden`}
+          className={`z-[60] flex w-full flex-col items-center justify-center gap-3 rounded-xl border border-white/30 bg-white/5 bg-clip-padding py-5 backdrop-blur-lg backdrop-filter hover:border-white/40 lg:hidden`}
         >
           {navLinks.map((link, index) => (
             <Link
               key={index}
               href={link.url}
               onClick={() => setIsOpen(false)}
-              className={`pl-4 text-center text-lg text-white underline-offset-4 hover:underline`}
+              className={`text-center text-lg text-white underline-offset-4 hover:underline`}
             >
               {link.name}
             </Link>

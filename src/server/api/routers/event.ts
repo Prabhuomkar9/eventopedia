@@ -1,6 +1,6 @@
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import {
-  createEventSchema, publishEventSchema
+  createEventSchema, publishEventSchema, addUserToEventSchema
 } from "~/server/schema/event";
 import { TRPCError } from "@trpc/server";
 
@@ -100,6 +100,38 @@ const eventRouter = createTRPCRouter({
         }
       })
     }),
+
+  addUserToClub: protectedProcedure
+    .input(addUserToEventSchema)
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.session.user.role !== "ADMIN" && ctx.session.user.role !== "PRESIDENT")
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You are not authorized to add a user to a club"
+        })
+
+      const club = await ctx.db.club.findUnique({
+        where: { id: input.eventId }
+      })
+
+      if (!club)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Club not found"
+        })
+
+
+      const updatedClub = await ctx.db.club.update({
+        where: { id: input.eventId },
+        data: {
+          members: {
+            connect: { id: input.userId }
+          }
+        }
+      })
+
+      return updatedClub
+    })
 });
 
 export default eventRouter;

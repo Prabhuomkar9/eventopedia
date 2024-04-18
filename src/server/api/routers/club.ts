@@ -4,7 +4,7 @@ import {
   createClubSchema,
   getClubSchema,
   updateClubSchema,
-  deleteClubSchema
+  deleteClubSchema,
 } from "~/server/schema/club"
 
 const clubRouter = createTRPCRouter({
@@ -139,7 +139,9 @@ const clubRouter = createTRPCRouter({
             message: "An error occurred while deleting the club"
           })
         })
-    })
+    }),
+
+
 })
 
 export default clubRouter

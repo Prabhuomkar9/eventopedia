@@ -11,8 +11,8 @@ const Admin: NextPage = () => {
   return (
     <DashBoardLayout allowedUserRole="ADMIN">
       <Tabs
-        defaultValue="users"
-        className="flex h-screen w-full flex-col items-center justify-start p-3"
+        defaultValue="user"
+        className="flex h-screen w-full flex-col items-center justify-start p-3 md:px-40 xl:px-96"
       >
         <TabsList className="grid w-full grid-cols-3">
           {/* <TabsTrigger value="branch">Branch</TabsTrigger> */}

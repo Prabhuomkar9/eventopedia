@@ -8,7 +8,7 @@ import Image from "next/image";
 const NavBar: FunctionComponent = () => {
   return (
     <div className="mx-3 flex justify-center">
-      <nav className="fixed z-[60] mt-3 w-full max-w-6xl rounded-full border  border-white/30 bg-white/5 bg-clip-padding px-5 backdrop-blur-lg backdrop-filter sm:mt-5">
+      <nav className="fixed z-[60] mt-3 w-full max-w-4xl rounded-full border  border-white/30 bg-white/5 bg-clip-padding px-5 backdrop-blur-lg backdrop-filter sm:mt-5">
         <div className="flex h-16 items-center justify-between px-4">
           <Link
             href={"/"}

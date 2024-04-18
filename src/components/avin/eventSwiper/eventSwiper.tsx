@@ -14,56 +14,49 @@ import {
   RxRocket,
 } from "react-icons/rx";
 
-import SpaceCity1 from "../../../../public/assets/avin/SpaceCity1.jpg";
-import SpaceCity2 from "../../../../public/assets/avin/SpaceCity2.jpeg";
-import SpaceCity3 from "../../../../public/assets/avin/SpaceCity3.jpeg";
-import SpaceCity4 from "../../../../public/assets/avin/SpaceCity4.jpeg";
-import SpaceCity5 from "../../../../public/assets/avin/SpaceCity5.jpeg";
-import SpaceCity6 from "../../../../public/assets/avin/SpaceCity6.jpeg";
 import { type IconType } from "react-icons/lib";
-import Image, { type StaticImageData } from "next/image";
 
 const ServiceData: {
   icon: IconType;
   title: string;
   content: string;
-  backgroundImage: StaticImageData;
+  backgroundImage: string;
 }[] = [
   {
     icon: RxCrop,
     title: "Development",
     content: "Event 1",
-    backgroundImage: SpaceCity2,
+    backgroundImage: "/assets/avin/SpaceCity1.jpg",
   },
   {
     icon: RxPencil2,
     title: "Branding",
     content: "Event 2",
-    backgroundImage: SpaceCity1,
+    backgroundImage: "/assets/avin/SpaceCity2.jpeg",
   },
   {
     icon: RxDesktop,
     title: "Design",
     content: "Event 3",
-    backgroundImage: SpaceCity6,
+    backgroundImage: "/assets/avin/SpaceCity2.jpeg",
   },
   {
     icon: RxReader,
     title: "Seo",
     content: "Event 4",
-    backgroundImage: SpaceCity4,
+    backgroundImage: "/assets/avin/SpaceCity2.jpeg",
   },
   {
     icon: RxAccessibility,
     title: "Management",
     content: "Event 5",
-    backgroundImage: SpaceCity5,
+    backgroundImage: "/assets/avin/SpaceCity2.jpeg",
   },
   {
     icon: RxRocket,
     title: "Production",
     content: "Event 6",
-    backgroundImage: SpaceCity3,
+    backgroundImage: "/assets/avin/SpaceCity2.jpeg",
   },
 ];
 
@@ -81,7 +74,7 @@ const EventSwiper = () => {
   }, []);
 
   return (
-    <div className="flex h-[900px] flex-col items-center justify-center bg-[#1f2937]">
+    <div className="z-[9999] flex h-[900px] flex-col items-center justify-center bg-[#1f2937]">
       <div className="relative px-10 py-10">
         <h1 className="rounded-3xl bg-gradient-to-br from-gray-800 to-gray-900 px-10 py-6 text-center text-5xl font-bold text-gray-100 shadow-lg">
           Upcoming Events
@@ -123,15 +116,15 @@ const EventSwiper = () => {
               }`}
               style={{ transition: "transform 0.5s ease, opacity 0.5s ease" }}
             >
-              <div className="absolute h-full w-full">
+              {/* <div className="absolute h-full w-full">
                 <div className="relative h-full w-full">
                   <Image fill src="/assets/avin/SpaceCity1.jpg" alt="image" />
                 </div>
-              </div>
-              {/* <div
+              </div> */}
+              <div
                 className="absolute inset-0 bg-cover bg-center"
                 style={{ backgroundImage: `url(${item.backgroundImage})` }}
-              /> */}
+              />
               <div className="absolute inset-0 bg-black opacity-10 group-hover:opacity-50" />
               <div className="relative flex flex-col gap-3">
                 <item.icon className="h-[32px] w-[32px] text-blue-600 group-hover:text-blue-400" />
