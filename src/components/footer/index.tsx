@@ -19,7 +19,7 @@ const Footer: FunctionComponent = () => {
             <Link href="https://github.com/">Bhvan R Shetty</Link>
           </li>
           <li>
-            <Link href="https://github.com/">Avin Mendonca</Link>
+            <Link href="https://github.com/avinmendonca">Avin Mendonca</Link>
           </li>
         </ul>
       </div>

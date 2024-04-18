@@ -17,11 +17,6 @@ const columns: ColumnDef<
     cell: ({ row }) => <div>{row.original.name}</div>,
   },
   {
-    accessorKey: "eventType",
-    header: "Event Type",
-    cell: ({ row }) => <div>{row.original.eventType}</div>,
-  },
-  {
     accessorKey: "eventState",
     header: "Event State",
     cell: ({ row }) => <div>{row.original.eventState}</div>,
