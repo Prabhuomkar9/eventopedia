@@ -4,10 +4,18 @@ import { navLinks } from "~/constants";
 import MobileNavBar from "./mobileNavBar";
 import AuthButtons from "./authButtons";
 import Image from "next/image";
+import { Roboto_Mono } from "next/font/google";
+
+const robot = Roboto_Mono({
+  weight: "600",
+  subsets: ["latin"],
+});
 
 const NavBar: FunctionComponent = () => {
   return (
-    <div className="mx-3 flex justify-center">
+    <div
+      className={`mx-3 flex justify-center ${robot.className} tracking-widest`}
+    >
       <nav className="fixed z-[60] mt-3 w-full max-w-4xl rounded-full border  border-white/30 bg-white/5 bg-clip-padding px-5 backdrop-blur-lg backdrop-filter sm:mt-5">
         <div className="flex h-16 items-center justify-between px-4">
           <Link
@@ -25,7 +33,7 @@ const NavBar: FunctionComponent = () => {
             </div>
           </Link>
 
-          <div className="hidden items-center space-x-8 text-2xl lg:flex">
+          <div className="hidden items-center space-x-12 text-2xl lg:flex">
             {navLinks.map((link, index) => (
               <div key={index} className="group relative">
                 <Link

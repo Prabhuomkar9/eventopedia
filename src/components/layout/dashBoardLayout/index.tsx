@@ -1,6 +1,7 @@
 import { type Role } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import React, { type FunctionComponent, type ReactNode } from "react";
+import { tiltePoppins } from "~/lib/utils";
 import NotFound from "~/pages/404";
 
 const DashBoardLayout: FunctionComponent<{
@@ -29,8 +30,8 @@ const DashBoardLayout: FunctionComponent<{
 
   return (
     <>
-      <div className="p-5">
-        <p className="text-5xl font-medium">
+      <div className="p-10">
+        <p className={`text-5xl font-medium ${tiltePoppins.className}`}>
           {allowedUserRole[0] + allowedUserRole.toLowerCase().slice(1)}{" "}
           Dashboard
         </p>

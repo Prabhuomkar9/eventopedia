@@ -18,3 +18,7 @@ export function formatDate(date: Date) {
 
   return `${day} ${months[month - 1]} ${year}`;
 }
+
+import { Poppins } from "next/font/google";
+
+export const tiltePoppins = Poppins({ weight: "600", subsets: ["latin"] });

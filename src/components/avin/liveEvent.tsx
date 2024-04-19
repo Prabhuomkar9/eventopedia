@@ -19,12 +19,12 @@ import Image from "next/image";
 import { formatDate } from "~/lib/utils";
 import { tiltePoppins } from "~/lib/utils";
 
-const UpcomingEvent = () => {
-  const { data: events, isLoading } = api.event.getPublishedEvents.useQuery();
+const LiveEvent = () => {
+  const { data: events, isLoading } = api.event.getLiveEvents.useQuery();
 
   const plugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return null;
 
   if (!events) return <div>No events available</div>;
 
@@ -32,9 +32,9 @@ const UpcomingEvent = () => {
     <div className="flex h-[900px] flex-col items-center justify-center gap-10 bg-cover bg-no-repeat">
       <div className="relative px-10 py-6">
         <h1
-          className={`from-white-800 rounded-3xl bg-opacity-50 bg-gradient-to-br to-gray-900 px-10 py-6 text-center text-5xl font-bold text-gray-100 shadow-lg backdrop-blur-lg ${tiltePoppins.className}`}
+          className={`from-white-800 flex flex-row items-center justify-center rounded-3xl bg-opacity-50 bg-gradient-to-br to-gray-900 px-10 py-6 text-center text-5xl font-bold text-gray-100 shadow-lg backdrop-blur-lg ${tiltePoppins.className}`}
         >
-          Upcoming Events
+          Live Events
         </h1>
       </div>
       <Carousel plugins={[plugin.current]}>
@@ -81,4 +81,4 @@ const UpcomingEvent = () => {
   );
 };
 
-export default UpcomingEvent;
+export default LiveEvent;

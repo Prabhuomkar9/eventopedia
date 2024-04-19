@@ -94,10 +94,47 @@ const eventRouter = createTRPCRouter({
         where: {
           AND: {
             eventState: "PUBLISHED",
-            startDateTime: {
+          }
+        },
+        include: {
+          club: true,
+          organisers: true
+        }
+      })
+    }),
+
+  getCompletedEvents: protectedProcedure
+    .query(async ({ ctx }) => {
+      return ctx.db.event.findMany({
+        where: {
+          AND: {
+            eventState: "COMPLETED",
+            endDateTime: {
               lte: new Date()
             },
           }
+        },
+        select: {
+          id: true,
+          bannerImage: true,
+          name: true,
+          club: {
+            select: {
+              name: true
+            }
+          },
+          description: true,
+          startDateTime: true,
+          endDateTime: true
+        }
+      })
+    }),
+
+  getLiveEvents: protectedProcedure
+    .query(async ({ ctx }) => {
+      return ctx.db.event.findMany({
+        where: {
+          eventState: "LIVE",
         },
         include: {
           club: true,

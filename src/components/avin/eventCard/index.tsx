@@ -3,75 +3,54 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
-
-//nested data is ok, see accessorKeys in ColumnDef below
-const data = [
-  {
-    firstName: "Hack-Expo",
-    address: "261 Erdman Ford",
-    city: "East Daphne",
-    state: "Kentucky",
-  },
-  {
-    firstName: "Jane",
-    address: "769 Dominic Grove",
-    city: "Columbus",
-    state: "Ohio",
-  },
-  {
-    firstName: "Joe",
-    address: "566 Brakus Inlet",
-    city: "South Linda",
-    state: "West Virginia",
-  },
-  {
-    firstName: "Kevin",
-    address: "722 Emie Stream",
-    city: "Lincoln",
-    state: "Nebraska",
-  },
-  {
-    firstName: "Joshua",
-    address: "32188 Larkin Turnpike",
-    city: "Charleston",
-    state: "South Carolina",
-  },
-];
+import { api } from "~/utils/api";
 
 const EventCard = () => {
+  const { data: rawData } = api.event.getCompletedEvents.useQuery();
+  const data = rawData ?? [
+    {
+      name: "Event Name",
+      // startDateTime: new Date(),
+      // endDateTime: new Date(),
+      // club: {
+      //   name: "Club",
+      // },
+    },
+  ];
+
   const columns = useMemo(
     () => [
       {
-        accessorKey: "firstName", //access nested data with dot notation
+        accessorKey: "name",
         header: "Event Name",
         size: 150,
       },
-      {
-        accessorKey: "address", //normal accessorKey
-        header: "Organised By",
-        size: 200,
-      },
-      {
-        accessorKey: "city",
-        header: "Completed On",
-        size: 150,
-      },
-      {
-        accessorKey: "state",
-        header: "State",
-        size: 150,
-      },
+      // {
+      //   accessorKey: "startDateTime",
+      //   header: "Start Date",
+      //   size: 150,
+      // },
+      // {
+      //   accessorKey: "endDateTime",
+      //   header: "End Date",
+      //   size: 150,
+      // },
+      // {
+      //   accessorKey: "club.name",
+      //   header: "Club",
+      //   size: 150,
+      // },
     ],
     [],
   );
 
-  const table = useMaterialReactTable({
-    columns,
-    data, //data must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
-  });
+  const table = useMaterialReactTable({ columns, data });
 
   return (
-    <div className="relative px-10 py-10" style={{ paddingBottom: "150px" }}>
+    <div
+      className="relative flex flex-col items-center justify-center gap-10 px-10 py-10"
+      style={{ paddingBottom: "150px" }}
+    >
       <h1 className="rounded-3xl bg-gradient-to-br from-gray-800 to-gray-900 py-6 text-center text-4xl font-bold text-gray-100 shadow-lg lg:text-5xl">
         Completed Events
       </h1>

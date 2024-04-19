@@ -6,6 +6,9 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import CustomHead from "../head";
 import { Toaster } from "../ui/sonner";
 import Footer from "../footer";
+import { Poppins } from "next/font/google";
+
+const poppins = Poppins({ weight: "200", subsets: ["latin"] });
 
 const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   return (
@@ -14,7 +17,7 @@ const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
       <ThemeProvider defaultTheme="dark" enableSystem disableTransitionOnChange>
         <NavBar />
         <main
-          className={`min-w-screen dark relative flex min-h-screen flex-col items-center justify-center bg-[url("/assets/svg/4.svg")] bg-cover pt-20 text-white dark:text-white`}
+          className={`min-w-screen ${poppins.className} dark relative  flex min-h-screen flex-col items-center justify-center bg-[url("/assets/svg/4.svg")] bg-cover pt-20 text-white dark:text-white`}
         >
           {children}
           <Toaster richColors position="top-center" />

@@ -11,7 +11,7 @@ const DashboardButton: FunctionComponent = () => {
 
   return (
     <Link href={`/dashboard/${session.user.role.toLowerCase()}`}>
-      <Button>Dashboard</Button>
+      <Button className="text-xl">Dashboard</Button>
     </Link>
   );
 };
