@@ -14,17 +14,18 @@ const NavBar: FunctionComponent = () => {
             href={"/"}
             className="flex items-center gap-3 font-semibold text-white"
           >
-            <div className="lg:w-30 lg:h-30 aspect-square h-14">
-              {/* <Image
+            <div className="lg:w-30 lg:h-30 relative aspect-square h-14">
+              <Image
                 className="relative w-auto "
-                src="/logos/logo.png"
+                src="/assets/png/logo.png"
                 priority
                 alt="Logo - Hackfest"
-              /> */}
+                fill
+              />
             </div>
           </Link>
 
-          <div className="hidden items-center space-x-8 lg:flex">
+          <div className="hidden items-center space-x-8 text-2xl lg:flex">
             {navLinks.map((link, index) => (
               <div key={index} className="group relative">
                 <Link

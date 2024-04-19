@@ -10,7 +10,7 @@ const MobileNavBar = () => {
 
   return (
     <nav className="flex items-center justify-center lg:hidden">
-      <div className="fixed right-5 top-8 z-[60] flex items-center space-x-4 lg:hidden">
+      <div className="fixed right-5 top-6 z-[60] flex items-center space-x-4 lg:hidden">
         <button
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle Menu"

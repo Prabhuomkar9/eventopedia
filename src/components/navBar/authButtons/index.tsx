@@ -1,11 +1,15 @@
 import { useSession } from "next-auth/react";
-import React from "react";
+import React, { type FunctionComponent } from "react";
 import GoogleSignIn from "~/components/auth/googleSignInBtn";
 import DashboardButton from "~/components/dashboard/dashboardButton";
 import ProfileIcon from "~/components/profile/profileIcon";
 import { Button } from "~/components/ui/button";
 
-const AuthButtons = () => {
+interface Props {
+  noPFP?: boolean;
+}
+
+const AuthButtons: FunctionComponent<Props> = ({ noPFP }) => {
   const { data: session, status } = useSession();
 
   return (
@@ -16,7 +20,7 @@ const AuthButtons = () => {
       ) : session && status === "authenticated" ? (
         <>
           <DashboardButton />
-          <ProfileIcon />
+          {!noPFP && <ProfileIcon />}
         </>
       ) : (
         <GoogleSignIn />

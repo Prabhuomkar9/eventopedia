@@ -11,15 +11,10 @@ const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   return (
     <>
       <CustomHead />
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="dark"
-        enableSystem
-        disableTransitionOnChange
-      >
+      <ThemeProvider defaultTheme="dark" enableSystem disableTransitionOnChange>
         <NavBar />
         <main
-          className={`min-w-screen relative flex min-h-screen flex-col items-center justify-center overflow-scroll bg-[url("/assets/svg/3.svg")] bg-cover pt-20 dark:text-white`}
+          className={`min-w-screen dark relative flex min-h-screen flex-col items-center justify-center bg-[url("/assets/svg/4.svg")] bg-cover pt-20 text-white dark:text-white`}
         >
           {children}
           <Toaster richColors position="top-center" />

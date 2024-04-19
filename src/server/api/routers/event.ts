@@ -92,7 +92,12 @@ const eventRouter = createTRPCRouter({
     .query(async ({ ctx }) => {
       return ctx.db.event.findMany({
         where: {
-          eventState: "PUBLISHED"
+          AND: {
+            eventState: "PUBLISHED",
+            startDateTime: {
+              lte: new Date()
+            },
+          }
         },
         include: {
           club: true,
@@ -100,6 +105,7 @@ const eventRouter = createTRPCRouter({
         }
       })
     }),
+
 
   addUserToClub: protectedProcedure
     .input(addUserToEventSchema)
