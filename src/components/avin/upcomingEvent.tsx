@@ -51,12 +51,23 @@ const UpcomingEvent = () => {
                   </CardTitle>
                   <CardDescription>
                     <div className="relative size-96">
-                      <Image
-                        src={`/assets/png/${event.bannerImage}.jpeg`}
-                        alt={event.name}
-                        className="rounded-lg object-contain"
-                        fill
-                      />
+                      {event.bannerImage ? (
+                        <Image
+                          src={`/assets/png/${event.bannerImage}.jpeg`}
+                          alt={event.name}
+                          className="rounded-lg object-contain"
+                          fill
+                        />
+                      ) : (
+                        <>
+                          <Image
+                            src={`/assets/avin/bg-image.jpeg`}
+                            alt={event.name}
+                            className="rounded-lg object-contain"
+                            fill
+                          />
+                        </>
+                      )}
                     </div>
                   </CardDescription>
                 </CardHeader>
