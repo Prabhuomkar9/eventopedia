@@ -1,5 +1,9 @@
 ### Note: Wanted to make a college event new display portal kind of website for Web Dev Course - NMAMIT, ended up not finishing it but got good recognition for efforts. I'll be discontinuing this repo hereon.
 
+Despite github contributions say only my name, it was a team effort
+[AVIN MENDONCA](https://github.com/avinmendonca)
+[BHUVAN SHETTY](https://github.com/bhuvan66)
+
 
 # Create T3 App
 
