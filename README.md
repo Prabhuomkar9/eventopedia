@@ -1,3 +1,6 @@
+### Note: Wanted to make a college event new display portal kind of website for Web Dev Course - NMAMIT, ended up not finishing it but got good recognition for efforts. I'll be discontinuing this repo hereon.
+
+
 # Create T3 App
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
